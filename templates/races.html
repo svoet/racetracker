@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% import "menu.html" as m_menu %}
+{% block menu %}
+    {{ m_menu.racemenu(race) }}
+{% endblock %}
+{% block content %}
+<div class="main">
+    <!-- Page Content -->
+    <div id="content">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn btn-info">
+                    <i class="fas fa-align-left"></i>
+                    <span>Toggle Sidebar</span>
+                </button>
+            </div>
+        </nav>
+
+        {% for racinggroup in race.racinggroups %}
+	<p>{{ racinggroup.name }}</p>
+	<div id="configure-classes" racinggroup-id={{ racinggroup.id }} class="card">
+	    <div class="card-header" id="headingOne">
+	      <h5 class="mb-0">
+		<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+		Classes
+		</button>
+	      </h5>
+	    </div>
+	    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+	      <div class="card-body">
+		{% for yachtclass in racinggroup.yachtclasses %}
+                <button type="button" id="yachtClassButton" class="btn btn-info">
+                    <i class="fas fa-align-left"></i>
+                    <span>{{ yachtclass.name }}</span>
+                </button>
+		{% endfor %}
+	      </div>
+	    </div>
+	  </div>
+	<div id="configure-participants" racinggroup-id={{ racinggroup.id }} class="card">
+	    <div class="card-header" id="headingOne">
+	      <h5 class="mb-0">
+		<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+		Participants	
+		</button>
+	      </h5>
+	    </div>
+	    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+	      <div class="card-body">
+		{% for participant in racinggroup.participants %}
+                <button type="button" id="participantButton" class="btn btn-info">
+                    <i class="fas fa-align-left"></i>
+                    <span>{{ participant.yacht.sailnumber }} : {{ participant.person.firstname }}{{ participant.person.lastname }}</span>
+                </button>
+		{% endfor %}
+	      </div>
+	    </div>
+	  </div>
+	<div id="configure-marks" racinggroup-id={{ racinggroup.id }} class="card">
+	    <div class="card-header" id="headingOne">
+	      <h5 class="mb-0">
+		<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+		Marks	
+		</button>
+	      </h5>
+	    </div>
+	    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+	      <div class="card-body">
+		{% for yachtclass in racinggroup.yachtclasses %}
+                <button type="button" id="yachtClassButton" class="btn btn-info">
+                    <i class="fas fa-align-left"></i>
+                    <span>{{ yachtclass.name }}</span>
+                </button>
+		{% endfor %}
+	      </div>
+	    </div>
+	  </div>
+        {% endfor %}
+        <button type="button" id="addRacingGroup" class="btn btn-info" onclick="addRacingGroup({{ race.id }});">
+            <i class="fas fa-align-left"></i>
+            <span>Add Racinggroup</span>
+        </button>
+    </div>
+</div>
+{% endblock content %}

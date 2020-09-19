@@ -1,0 +1,15 @@
+yamlloader>=0.5.5
+Werkzeug>=1.0.1
+urllib3>=1.25.10
+swagger-ui-bundle>=0.0.8
+SQLAlchemy>=1.3.19
+PyYAML>=5.3.1
+marshmallow>=3.7.1
+marshmallow-sqlalchemy>=0.23.1
+MarkupSafe>=1.1.1
+jsonschema>=3.2.0
+Jinja2>=2.11.2
+Flask>=1.1.2
+Flask-SQLAlchemy>=2.4.4
+flask-marshmallow>=0.13.0
+connexion>=2.7.0

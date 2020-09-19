@@ -1,0 +1,1025 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger REST Article
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath: "/api"
+
+# Paths supported by the server application
+paths:
+  /races:
+    get:
+      tags:
+        - "Races"
+      summary: "The races data structure supported by the server application"
+      description: "Read the list of races"
+      responses:
+        200:
+          description: "Successful read races list operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Race'
+    post:
+      tags:
+        - "Races"
+      description: "Add a new race"
+      parameters:
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/RaceAdd'
+      responses:
+        200:
+          description: "Successful add race operation"
+          schema:
+            $ref: '#/definitions/Race'
+  /races/{object_id}:
+    get:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Races"
+      summary: "The races data structure supported by the server application"
+      description: "get a given race by id"
+      responses:
+        200:
+          description: "Successful read races list operation"
+          schema:
+            $ref: '#/definitions/Race'
+    put:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/Race'
+      tags:
+        - "Races"
+      description: "Update an existing race"
+      responses:
+        200:
+          description: "Successful update race operation"
+          schema:
+            $ref: '#/definitions/Race'
+    delete:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Races"
+      description: "Delete an existing race"
+      responses:
+        200:
+          description: "Successful delete race operation"
+  /racinggroups:
+    get:
+      tags:
+        - "RacingGroups"
+      summary: "The racinggroups data structure supported by the server application"
+      description: "Read the list of racinggroups"
+      responses:
+        200:
+          description: "Successful read racinggroups list operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/RacingGroup'
+    post:
+      tags:
+        - "RacingGroups"
+      description: "Add a new racinggroup"
+      parameters:
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/RacingGroupAdd'
+      responses:
+        200:
+          description: "Successful add racinggroup operation"
+          schema:
+            $ref: '#/definitions/RacingGroup'
+  /racinggroups/{object_id}:
+    get:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "RacingGroups"
+      summary: "The racinggroups data structure supported by the server application"
+      description: "get a given racinggroup by id"
+      responses:
+        200:
+          description: "Successful read racinggroups list operation"
+          schema:
+            $ref: '#/definitions/RacingGroup'
+    put:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/RacingGroup'
+      tags:
+        - "RacingGroups"
+      description: "Update an existing racinggroup"
+      responses:
+        200:
+          description: "Successful update racinggroup operation"
+          schema:
+            $ref: '#/definitions/RacingGroup'
+    delete:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "RacingGroups"
+      description: "Delete an existing racinggroup"
+      responses:
+        200:
+          description: "Successful delete racinggroup operation"
+  /heats:
+    get:
+      tags:
+        - "Heats"
+      summary: "The heats data structure supported by the server application"
+      description: "Read the list of heats"
+      responses:
+        200:
+          description: "Successful read heats list operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Heat'
+    post:
+      tags:
+        - "Heats"
+      description: "Add a new heat"
+      parameters:
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/HeatAdd'
+      responses:
+        200:
+          description: "Successful add heat operation"
+          schema:
+            $ref: '#/definitions/Heat'
+  /heats/{object_id}:
+    get:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Heats"
+      summary: "The heats data structure supported by the server application"
+      description: "get a given heat by id"
+      responses:
+        200:
+          description: "Successful read heats list operation"
+          schema:
+            $ref: '#/definitions/Heat'
+    put:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/Heat'
+      tags:
+        - "Heats"
+      description: "Update an existing heat"
+      responses:
+        200:
+          description: "Successful update heat operation"
+          schema:
+            $ref: '#/definitions/Heat'
+    delete:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Heats"
+      description: "Delete an existing heat"
+      responses:
+        200:
+          description: "Successful delete heat operation"
+  /heats/{heat_id}/getParticipants:
+    get:
+      operationId: api.heats.getParticipants
+      parameters:
+        - in: path
+          name: heat_id
+          required : true
+          type: integer
+      tags:
+        - "Heats"
+      summary: "gets participants with passing order and ranking"
+      description: "gets participants with passing order and ranking"
+      responses:
+        200:
+          description: "Successful read heats list operation"
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                participant:
+                  $ref: '#/definitions/Participant'
+                position:
+                  type: integer
+                  format: int64
+                passing_order:
+                  type: integer
+                  format: int64
+                roundings:
+                  type: array
+                  items:
+                    $ref: '#/definitions/Rounding'
+
+  /heats/{heat_id}/getRoundings:
+    get:
+      operationId: api.heats.getRoundings
+      parameters:
+        - in: path
+          name: heat_id
+          required : true
+          type: integer
+      tags:
+        - "Heats"
+      summary: "gets roundings for this heat in chronological order"
+      description: ""
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/RoundingWithParticipant'
+  /heats/{heat_id}/addRounding:
+    put:
+      operationId: api.heats.addRounding
+      parameters:
+        - in: path
+          name: heat_id
+          required : true
+          type: integer
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            type: object
+            properties:
+              participant_id:
+                type: integer
+                format: int64
+              mark_id:
+                type: integer
+                format: int64
+      tags:
+        - "Heats"
+      summary: "Registers a rounding of a mark in a heat"
+      description: "This is to be used while scoring the heat"
+      responses:
+        200:
+          description: "Successful adding of rounding operation"
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Rounding'
+              type: object
+  /marks:
+    get:
+      tags:
+        - "Marks"
+      summary: "The marks data structure supported by the server application"
+      description: "Read the list of marks"
+      responses:
+        200:
+          description: "Successful read marks list operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Mark'
+    post:
+      tags:
+        - "Marks"
+      description: "Add a new mark"
+      parameters:
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/MarkAdd'
+      responses:
+        200:
+          description: "Successful add mark operation"
+          schema:
+            $ref: '#/definitions/Mark'
+  /marks/{object_id}:
+    get:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Marks"
+      summary: "The marks data structure supported by the server application"
+      description: "get a given mark by id"
+      responses:
+        200:
+          description: "Successful read marks list operation"
+          schema:
+            $ref: '#/definitions/Mark'
+    put:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/Mark'
+      tags:
+        - "Marks"
+      description: "Update an existing mark"
+      responses:
+        200:
+          description: "Successful update mark operation"
+          schema:
+            $ref: '#/definitions/Mark'
+    delete:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Marks"
+      description: "Delete an existing mark"
+      responses:
+        200:
+          description: "Successful delete mark operation"
+  /participants:
+    get:
+      tags:
+        - "Participants"
+      summary: "The participants data structure supported by the server application"
+      description: "Read the list of participants"
+      responses:
+        200:
+          description: "Successful read participants list operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Participant'
+    post:
+      tags:
+        - "Participants"
+      description: "Add a new participant"
+      parameters:
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/ParticipantAdd'
+      responses:
+        200:
+          description: "Successful add participant operation"
+          schema:
+            $ref: '#/definitions/Participant'
+  /participants/{object_id}:
+    get:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Participants"
+      summary: "The participants data structure supported by the server application"
+      description: "get a given participant by id"
+      responses:
+        200:
+          description: "Successful read participants list operation"
+          schema:
+            $ref: '#/definitions/Participant'
+    put:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/Participant'
+      tags:
+        - "Participants"
+      description: "Update an existing participant"
+      responses:
+        200:
+          description: "Successful update participant operation"
+          schema:
+            $ref: '#/definitions/Participant'
+    delete:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Participants"
+      description: "Delete an existing participant"
+      responses:
+        200:
+          description: "Successful delete participant operation"
+  /persons:
+    get:
+      tags:
+        - "Persons"
+      summary: "The persons data structure supported by the server application"
+      description: "Read the list of persons"
+      responses:
+        200:
+          description: "Successful read persons list operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Person'
+    post:
+      tags:
+        - "Persons"
+      description: "Add a new person"
+      parameters:
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/PersonAdd'
+      responses:
+        200:
+          description: "Successful add person operation"
+          schema:
+            $ref: '#/definitions/Person'
+  /persons/{object_id}:
+    get:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Persons"
+      summary: "The persons data structure supported by the server application"
+      description: "get a given person by id"
+      responses:
+        200:
+          description: "Successful read persons list operation"
+          schema:
+            $ref: '#/definitions/Person'
+    put:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/Person'
+      tags:
+        - "Persons"
+      description: "Update an existing person"
+      responses:
+        200:
+          description: "Successful update person operation"
+          schema:
+            $ref: '#/definitions/Person'
+    delete:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Persons"
+      description: "Delete an existing person"
+      responses:
+        200:
+          description: "Successful delete person operation"
+  /roundings:
+    get:
+      tags:
+        - "Roundings"
+      summary: "The roundings data structure supported by the server application"
+      description: "Read the list of roundings"
+      responses:
+        200:
+          description: "Successful read roundings list operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Rounding'
+    post:
+      tags:
+        - "Roundings"
+      description: "Add a new rounding"
+      parameters:
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/RoundingAdd'
+      responses:
+        200:
+          description: "Successful add rounding operation"
+          schema:
+            $ref: '#/definitions/Rounding'
+  /roundings/{object_id}:
+    get:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Roundings"
+      summary: "The roundings data structure supported by the server application"
+      description: "get a given rounding by id"
+      responses:
+        200:
+          description: "Successful read roundings list operation"
+          schema:
+            $ref: '#/definitions/Rounding'
+    put:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/Rounding'
+      tags:
+        - "Roundings"
+      description: "Update an existing rounding"
+      responses:
+        200:
+          description: "Successful update rounding operation"
+          schema:
+            $ref: '#/definitions/Rounding'
+    delete:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Roundings"
+      description: "Delete an existing rounding"
+      responses:
+        200:
+          description: "Successful delete rounding operation"
+  /yachtclasses:
+    get:
+      tags:
+        - "YachtClasses"
+      summary: "The yachtclasss data structure supported by the server application"
+      description: "Read the list of yachtclasss"
+      responses:
+        200:
+          description: "Successful read yachtclasss list operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/YachtClass'
+    post:
+      tags:
+        - "YachtClasses"
+      description: "Add a new yachtclass"
+      parameters:
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/YachtClassAdd'
+      responses:
+        200:
+          description: "Successful add yachtclass operation"
+          schema:
+            $ref: '#/definitions/YachtClass'
+  /yachtclasses/{object_id}:
+    get:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "YachtClasses"
+      summary: "The yachtclasss data structure supported by the server application"
+      description: "get a given yachtclass by id"
+      responses:
+        200:
+          description: "Successful read yachtclasss list operation"
+          schema:
+            $ref: '#/definitions/YachtClass'
+    put:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/YachtClass'
+      tags:
+        - "YachtClasses"
+      description: "Update an existing yachtclass"
+      responses:
+        200:
+          description: "Successful update yachtclass operation"
+          schema:
+            $ref: '#/definitions/YachtClass'
+    delete:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "YachtClasses"
+      description: "Delete an existing yachtclass"
+      responses:
+        200:
+          description: "Successful delete yachtclass operation"
+  /yachts:
+    get:
+      tags:
+        - "Yachts"
+      summary: "The yachts data structure supported by the server application"
+      description: "Read the list of yachts"
+      responses:
+        200:
+          description: "Successful read yachts list operation"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Yacht'
+    post:
+      tags:
+        - "Yachts"
+      description: "Add a new yacht"
+      parameters:
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/YachtAdd'
+      responses:
+        200:
+          description: "Successful add yacht operation"
+          schema:
+            $ref: '#/definitions/Yacht'
+  /yachts/{object_id}:
+    get:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Yachts"
+      summary: "The yachts data structure supported by the server application"
+      description: "get a given yacht by id"
+      responses:
+        200:
+          description: "Successful read yachts list operation"
+          schema:
+            $ref: '#/definitions/Yacht'
+    put:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            $ref: '#/definitions/Yacht'
+      tags:
+        - "Yachts"
+      description: "Update an existing yacht"
+      responses:
+        200:
+          description: "Successful update yacht operation"
+          schema:
+            $ref: '#/definitions/Yacht'
+    delete:
+      parameters:
+        - in: path
+          name: object_id
+          required : true
+          type: integer
+      tags:
+        - "Yachts"
+      description: "Delete an existing yacht"
+      responses:
+        200:
+          description: "Successful delete yacht operation"
+definitions:
+  HeatStatus:
+    type: "string"
+    enum:
+      - not_started
+      - started
+      - ended
+      - cancelled
+      - closed
+  Race:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      starttime:
+         type: string
+      racinggroups:
+        type: array
+        items:
+          $ref: '#/definitions/RacingGroup'
+  RaceAdd:
+    type: object
+    properties:
+      name:
+        type: string
+      starttime:
+         type: string
+  RacingGroup:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      race_id:
+        type: integer 
+      participants:
+        type: array
+        items:
+          $ref: '#/definitions/Participant'
+      heats:
+        type: array
+        items:
+          $ref: '#/definitions/Heat'
+      yachtclasses:
+        type: array
+        items:
+          $ref: '#/definitions/YachtClass'
+  RacingGroupAdd:
+    type: object
+    properties:
+      race_id:
+        type: integer 
+      name:
+        type: string
+  Heat:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      racinggroup_id:
+        type: string
+      starttime:
+        type: string
+      endtime:
+        type: string
+      roundings:
+        type: array
+        items:
+          $ref: '#/definitions/Rounding'
+      status:
+        type: integer
+  HeatAdd:
+    type: object
+    properties:
+      racinggroup_id:
+        type: integer
+      starttime:
+        type: string
+      endtime:
+        type: string
+  Mark:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      order:
+        type: integer
+      racinggroup_id:
+        type: integer
+      roundings:
+        type: array
+        items:
+          $ref: '#/definitions/Rounding'
+  MarkAdd:
+    type: object
+    properties:
+      name:
+        type: string
+      order:
+        type: integer
+      racinggroup_id:
+        type: integer
+  Participant:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      racinggroup_id:
+        type: integer
+      yacht_id:
+        type: integer
+      person_id:
+        type: integer
+  ParticipantAdd:
+    type: object
+    properties:
+      racinggroup_id:
+        type: integer
+      yacht_id:
+        type: integer
+      person_id:
+        type: integer
+  Person:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      firstname:
+        type: string
+      lastname:
+        type: string
+      countrycode:
+        type: string
+      fislyid:
+        type: string
+      participants:
+        type: array
+        items:
+          $ref: '#/definitions/Participant'
+  PersonAdd:
+    type: object
+    properties:
+      firstname:
+        type: string
+      lastname:
+        type: string
+      countrycode:
+        type: string
+      fislyid:
+        type: string
+  Rounding:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      participant_id:
+        type: integer
+      mark_id:
+        type: integer
+      heat_id:
+        type: integer
+      registeredtime:
+        type: string
+      overriddentime:
+        type: string
+  RoundingWithParticipant:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      participant_id:
+        type: integer
+      participant:
+        $ref: '#/definitions/Participant'
+      mark_id:
+        type: integer
+      heat_id:
+        type: integer
+      registeredtime:
+        type: string
+      overriddentime:
+        type: string
+  RoundingAdd:
+    type: object
+    properties:
+      participant_id:
+        type: integer
+      mark_id:
+        type: integer
+      heat_id:
+        type: integer
+      registeredtime:
+        type: string
+      overriddentime:
+        type: string
+  YachtClass:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      code:
+        type: string
+      description:
+        type: string
+      yachts:
+        type: array
+        items:
+          $ref: '#/definitions/Yacht'
+  YachtClassAdd:
+    type: object
+    properties:
+      code:
+        type: string
+      description:
+        type: string
+  Yacht:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      sailnumber:
+        type: string
+      yachtclass_id:
+        type: integer
+      participants:
+        type: array
+        items:
+          $ref: '#/definitions/Participant'
+  YachtAdd:
+    type: object
+    properties:
+      sailnumber:
+        type: string
+      yachtclass_id:
+        type: integer
