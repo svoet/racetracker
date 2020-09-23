@@ -1,0 +1,82 @@
+{% macro add_participant(racinggroup,persons,yachts) %}
+<div class="modal fade" id="addParticipant" tabindex="-1" role="dialog" aria-labelledby="addParticipantLabel" aria-hidden="true" data-racinggroup-id="{{ racinggroup.id}}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addParticipantLabel">Add a participant</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+	<div class="modal-body" >
+	  <div class="container-fluid">
+	    <div class="row">
+	      <div class="col-md-6 ml-auto">
+                <div class="row">Pilot</div>
+                <div class="row">
+                  <div class="list-group" id="listPilots">
+                    <input class="list-group-item list-group-item-action" id="filterPilot"></input>
+                      {% for person in persons %} 
+                      <button class="list-group-item list-group-item-action pilot" data-toggle="list" data-id="{{ person.id }}" data-firstname="{{ person.firstname}}" data-lastname="{{ person.lastname }}">{{ person.firstname}} {{ person.lastname }}</button>
+                      {% endfor %}
+                  </div>
+                </div>
+	      </div>
+	      <div class="col-md-6 ml-auto">
+                <div class="row">Yacht</div>
+                <div class="row">
+                  <div class="list-group" id="listYachts">
+                    <input class="list-group-item list-group-item-action" id="filterYacht"></input>
+                      {% for yacht in yachts %} 
+                      <button class="list-group-item list-group-item-action yacht" data-toggle="list" data-id="{{ yacht.id }}" data-yachtclass-id="{{ yacht.yachtclass_id}}">{{ yacht.sailnumber }}</button>
+                      {% endfor %}
+                  </div>
+                </div>
+	      </div>
+	    </div>
+	    <div class="row">
+<form id="addParticipant">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputFirstname4">First name</label>
+      <input type="text" class="form-control person" id="inputFirstname4" placeholder="First name" name="firstname">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputLastname4">Last name</label>
+      <input type="text" class="form-control person" id="inputLastname4" placeholder="Last name" name="lastname">
+    </div>
+  </div>
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Email</label>
+      <input type="email" class="form-control person" id="inputEmail4" placeholder="Email">
+    </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputSailnumber4">Sailnumber</label>
+      <input type="text" class="form-control yacht" id="inputSailnumber4" name="sailnumber">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputClass4">Class</label>
+      <select id="inputClass4" class="form-control yacht" name="yachtclass_name">
+        <option selected>Choose...</option>
+	{% for yachtclass in racinggroup.yachtclasses %}
+        <option data-id="{{ yachtclass.id }}">{{yachtclass.description}}</option>
+	{% endfor %}
+      </select>
+    </div>
+  </div>
+  <input type="hidden" id="personId" name="person_id">
+  <input type="hidden" id="yachtId" name="yacht_id">
+  <input type="hidden" id="yachtClassId" name="yachtclass_id">
+</form>
+	    </div>
+	  </div>
+	</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="save" data-racinggroup-id="{{racinggroup.id}}">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
