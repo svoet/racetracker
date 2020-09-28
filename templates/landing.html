@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "menu.html" as m_menu %}
+{% import "widgets.html" as m_widgets %}
+{% block menu %}
+{% endblock %}
+{% block content %}
+<div class="main">
+    {% for race in races %}
+<div class="card" style="width: 18rem;">
+  <img class="card-img-top" src="..." alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{ race.name }}</h5>
+    <p class="card-text">This race starts on {{ race.starttime }}</p>
+    <a href="{{ request.host_url }}race/{{ race.id }}" class="btn btn-primary">Configure race</a>
+    <a href="{{ request.host_url }}race/{{ race.id }}/live" class="btn btn-primary">Follow live</a>
+  </div>
+</div>
+    {% endfor %}
+</div>
+{% endblock content %}

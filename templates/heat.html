@@ -1,0 +1,12 @@
+{% macro heat_status_text(heat) %}
+<!-- NOT_STARTED = 0 STARTED = 1 ENDED = 2 CANCELLED = 3-->
+{% if heat.status == 0 %}
+Not Started
+{% elif heat.status == 1 %}
+Started
+{% elif heat.status == 2 %}
+Ended
+{% elif heat.status == 3 %}
+Cancelled
+{% endif %}
+{% endmacro %}
