@@ -1,8 +1,7 @@
 from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
-#from marshmallow_sqlalchemy.fields import Nested
-#from config import db, ma
+from marshmallow import ValidationError
 from apihandler import GenericAPIHandler
 import datetime
 import pdb
@@ -57,6 +56,7 @@ class Person(config.db.Model):
     lastname = Column(String)
     countrycode = Column(String)
     fislyid = Column(String)
+    email = Column(String)
     participants = relationship( 'Participant',backref="person")
     yachts = relationship('Yacht', secondary = 'person_yacht_link')
 
@@ -203,7 +203,7 @@ class HeatAPIHandler(GenericAPIHandler):
         object['overriddentime']=object['registeredtime']
         object['heat_id']=heat_id
         if Participant.query.filter(Participant.id == object['participant_id']).one_or_none() == None:
-            raise ma.ValidationError("Participant with id '{}' not found.".format(object['participant_id']))
+            raise ValidationError("Participant with id '{}' not found.".format(object['participant_id']))
         api=RoundingAPIHandler()
         api.post(object)
 
@@ -277,7 +277,61 @@ class RacingGroupAPIHandler(GenericAPIHandler):
     object_class = RacingGroup
     schema_class = RacingGroupSchema
 
+    def addParticipant(self,racinggroup_id,object):
+        person_id=None
+        yacht_id=None
+        if ("person_id" in object.keys()):
+            person_id=object['person_id']
+        if ("yacht_id" in object.keys()):
+            yacht_id=object['yacht_id']
+        if person_id == None or Person.query.filter(Person.id == person_id).one_or_none() == None:
+            new_person={ 'firstname': object['firstname'],\
+                    'lastname':object['lastname'],\
+                     }
+            for key in ['email','fislyid','countrycode']:
+                if key in object.keys():
+                     new_person[key]=object[key]
+            ret=PersonAPIHandler().post(new_person)
+            person_id=ret[0]['id']
+        if yacht_id == None or Yacht.query.filter(Yacht.id == yacht_id).one_or_none() == None:
+            new_yacht={ 'sailnumber': object['sailnumber'],\
+                    'yachtclass_id':object['yachtclass_id']\
+                    }
+            ret=YachtAPIHandler().post(new_yacht)
+            yacht_id=ret[0]['id']
 
+        if Participant.query.filter(Participant.racinggroup_id == racinggroup_id).filter(Participant.person_id == person_id).one_or_none():
+            raise ValidationError("This person ({}) is already registered in this racinggroup ({})".format(person_id,racinggroup_id))
+        if Participant.query.filter(Participant.racinggroup_id == racinggroup_id).filter(Participant.yacht_id == yacht_id).one_or_none():
+            raise ValidationError("This yacht ({}) is already registered in this racinggroup ({})".format(yacht_id,racinggroup_id))
+        return ParticipantAPIHandler().post({'racinggroup_id':racinggroup_id,'person_id':person_id,'yacht_id':yacht_id})
+
+    def addYachtClass(self,racinggroup_id,yachtclass_id):
+        yachtclass=YachtClass.query.filter(YachtClass.id == yachtclass_id).one_or_none()
+        racinggroup=RacingGroup.query.filter(RacingGroup.id == racinggroup_id).one_or_none()
+
+        if yachtclass and racinggroup:
+            racinggroup.yachtclasses.append(yachtclass)
+            config.db.session.add(yachtclass)
+            config.db.session.commit()
+
+    def removeYachtClass(self,racinggroup_id,yachtclass_id):
+        yachtclass=YachtClass.query.filter(YachtClass.id == yachtclass_id).one_or_none()
+        racinggroup=RacingGroup.query.filter(RacingGroup.id == racinggroup_id).one_or_none()
+
+        if yachtclass and racinggroup:
+            racinggroup.yachtclasses.remove(yachtclass)
+            config.db.session.add(yachtclass)
+            config.db.session.commit()
+
+    def addHeat(self,racinggroup_id,heat={}):
+        racinggroup=RacingGroup.query.filter(RacingGroup.id == racinggroup_id).one_or_none()
+
+        if not racinggroup:
+            raise ValidationError("Racinggroup ({}) not found".format(racinggroup_id))
+
+        heat['racinggroup_id'] = racinggroup_id
+        return HeatAPIHandler().post(heat)
 
 class RoundingSchema(config.ma.SQLAlchemyAutoSchema):
     class Meta:

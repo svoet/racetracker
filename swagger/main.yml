@@ -162,6 +162,109 @@ paths:
       responses:
         200:
           description: "Successful delete racinggroup operation"
+  /racinggroups/{racinggroup_id}/addParticipant:
+    put:
+      operationId: api.racinggroups.addParticipant
+      tags:
+        - "RacingGroups"
+      summary: "Add a participant to a racinggroup"
+      description: "if yacht_id or person_id is set, the participant will be added based on these IDs. If either is not set, a new object will be created with
+        the data in the other fields"
+      parameters:
+        - in: path
+          name: racinggroup_id
+          required : true
+          type: integer
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            type: object
+            properties:
+              yacht_id:
+                type: integer
+              person_id:
+                type: integer
+              firstname:
+                type: string
+              lastname:
+                type: string
+              countrycode:
+                type: string
+              fislyid:
+                type: string
+              email:
+                type: string
+              sailnumber:
+                type: string
+              yachtclass_id:
+                type: integer
+      responses:
+        200:
+          description: "Successful add Participant to racinggroup"
+          schema:
+             $ref: '#/definitions/Participant'
+  /racinggroups/{racinggroup_id}/addHeat:
+    put:
+      operationId: api.racinggroups.addHeat
+      tags:
+        - "RacingGroups"
+      summary: "Add a heat to a racinggroup"
+      description: "Heat will be named/numbered automatically if no body is submitted"
+      parameters:
+        - in: path
+          name: racinggroup_id
+          required : true
+          type: integer
+        - in: body 
+          name: heat
+          required : false
+          schema: 
+             $ref: '#/definitions/HeatAdd'
+      responses:
+        200:
+          description: "Successful add Heat to racinggroup"
+          schema:
+             $ref: '#/definitions/Heat'
+  /racinggroups/{racinggroup_id}/addYachtClass/{yachtclass_id}:
+    post:
+      operationId: api.racinggroups.addYachtClass
+      tags:
+        - "RacingGroups"
+      summary: "Add a yachtclass to a racinggroup"
+      description: "Add yachtclass by id" 
+      parameters:
+        - in: path
+          name: racinggroup_id
+          required : true
+          type: integer
+        - in: path
+          name: yachtclass_id
+          required : true
+          type: integer
+      responses:
+        200:
+          description: "Successful add YachtClass to racinggroup"
+          schema:
+            $ref: '#/definitions/RacingGroup'
+  /racinggroups/{racinggroup_id}/removeYachtClass/{yachtclass_id}:
+    delete:
+      operationId: api.racinggroups.removeYachtClass
+      parameters:
+        - in: path
+          name: racinggroup_id
+          required : true
+          type: integer
+        - in: path
+          name: yachtclass_id
+          required : true
+          type: integer
+      tags:
+        - "RacingGroups"
+      description: "Delete an existing YachtClass from racinggroup"
+      responses:
+        200:
+          description: "Successful delete racinggroup operation"
   /heats:
     get:
       tags:
@@ -216,7 +319,7 @@ paths:
           name: object
           required : true
           schema: 
-            $ref: '#/definitions/Heat'
+            $ref: '#/definitions/HeatAdd'
       tags:
         - "Heats"
       description: "Update an existing heat"
@@ -859,6 +962,8 @@ definitions:
         type: string
       endtime:
         type: string
+      status:
+        type: integer
   Mark:
     type: object
     properties:

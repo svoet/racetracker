@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import os
 import sys
-from config import db
+from config import db,basedir
 from datetime import datetime
 import api
 
@@ -75,9 +75,11 @@ PARTICIPANTS = [
               { "id": 3, "person_id": 3, "racinggroup_id": 1, "yacht_id": 3 },
                 { "id": 4, "person_id": 4, "racinggroup_id": 1, "yacht_id": 4 }
                 ]
+
 # Delete database file if it exists currently
-if os.path.exists('racetracker.db'):
-    os.remove('racetracker.db')
+dbfile=os.path.join(basedir,'data', 'racetracker.db')
+if os.path.exists(dbfile):
+    os.remove(dbfile)
 
 # Create the database
 db.create_all()

@@ -1,7 +1,10 @@
+{% import "heat.html" as m_heat %}
 {% macro racemenu(race) %}
-<div class="wrapper">
     <!-- Sidebar -->
     <nav id="sidebar">
+	<div class="btn btn-info" id="dismiss">
+            <i class="fas fa-arrow-left"></i>
+        </div>
         <div class="sidebar-header">
             <h3>RaceTracker</h3>
         </div>
@@ -15,37 +18,24 @@
                 <ul class="collapse list-unstyled" id="rg{{ racinggroup.id }}Submenu">
                 {% for heat in racinggroup.heats %}
                     <li>
-                        <a href="{{ request.host_url }}race/{{ race.id }}/heat/{{ heat.id }}/scoring">Heat {{ heat.starttime }}</a>
+                        <a href="{{ request.host_url }}race/{{ race.id }}/heat/{{ heat.id }}/scoring">{{ heat.name }} ({{ m_heat.heat_status_text(heat) }})</a>
+
                     </li>
                 {% endfor %}
                     <li>
-                        <a href="#">Add Heat</a>
+                        <a id="addHeat" data-id="{{ racinggroup.id }}" href="#">Add Heat</a>
                     </li>
                 </ul>
             </li>
         {% endfor %}
             <li>
-                Configure
+                <a href="{{ request.host_url }}race/{{ race.id }}">Configure</a>
             </li>
-        {% for racinggroup in race.racinggroups %}
-            <li class="active">
-                <a href="#rg{{ racinggroup.id }}Configure" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">{{ racinggroup.name }}</a>
-                <ul class="collapse list-unstyled" id="rg{{ racinggroup.id }}Configure">
-                    <li>
-                        <a href="#">Participants</a>
-                    </li>
-                    <li>
-                        <a href="#">Marks</a>
-                    </li>
-                </ul>
-            </li>
-        {% endfor %}
             <li>
                 <a href="{{ request.host_url }}race/{{ race.id }}/live">Live</a>
             </li>
         </ul>
 
     </nav>
-</div>
 {% endmacro %}
 

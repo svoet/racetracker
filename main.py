@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import sys
+import os
 sys.path.append("models")
 from flask import (
     Flask,
@@ -9,6 +10,12 @@ import config
 import api
 import models
 from connexion.resolver import RestyResolver
+
+#import initdb_test
+if not os.path.exists(config.dbfile):
+    # Create the database
+    db.create_all()
+    db.session.commit()
 
 # Create the application instance
 app = config.connex_app
@@ -25,11 +32,11 @@ def home():
 
     :return:        the rendered template 'home.html'
     """
-    return render_template('base.html')
+    return render_template('landing.html',races=api.races.search())
 
 @app.route('/race/<id>')
 def race(id):
-    return render_template('races.html',race=api.races.get(id),all_classes=api.yachtclasses.search(),all_marks=api.marks.search())
+    return render_template('races.html',race=api.races.get(id),all_yachtclasses=api.yachtclasses.search(),all_marks=api.marks.search(),all_persons=api.persons.search(),all_yachts=api.yachts.search())
 
 @app.route('/race/<id>/live')
 def live(id):
@@ -37,7 +44,7 @@ def live(id):
 
 @app.route('/race/<id>/heat/<heat_id>/scoring')
 def scoring(id,heat_id):
-    return render_template('scoring.html',race=api.races.get(id),heat_id=heat_id)
+    return render_template('scoring.html',race=api.races.get(id),heat=api.heats.get(heat_id))
 
 #def racemenu_data(id):
 #    return api.races.get(id)

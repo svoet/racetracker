@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% import "menu.html" as m_menu %}
+{% import "widgets.html" as m_widgets %}
 {% block menu %}
     {{ m_menu.racemenu(race) }}
 {% endblock %}
@@ -18,63 +19,68 @@
 
         {% for racinggroup in race.racinggroups %}
 	<p>{{ racinggroup.name }}</p>
+        <div id="accordion">
 	<div id="configure-classes" racinggroup-id={{ racinggroup.id }} class="card">
 	    <div class="card-header" id="headingOne">
 	      <h5 class="mb-0">
-		<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+		<button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ racinggroup.id }}-yachtclasses" aria-expanded="true" aria-controls="collapse-{{ racinggroup.id }}-yachtclasses">
 		Classes
 		</button>
 	      </h5>
 	    </div>
-	    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+	    <div id="collapse-{{ racinggroup.id }}-yachtclasses" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
 	      <div class="card-body">
-		{% for yachtclass in racinggroup.yachtclasses %}
-                <button type="button" id="yachtClassButton" class="btn btn-info">
+		{% for yachtclass in all_yachtclasses %}
+                <button type="button" id="yachtClassButton" data-toggle="buttons" data-id="{{yachtclass.id}}" class="btn btn-info {% if yachtclass in racinggroup.yachtclasses %} active" area-pressed="true{% endif %}">
                     <i class="fas fa-align-left"></i>
-                    <span>{{ yachtclass.name }}</span>
+                    <span>{{ yachtclass.description }}</span>
                 </button>
 		{% endfor %}
 	      </div>
 	    </div>
 	  </div>
 	<div id="configure-participants" racinggroup-id={{ racinggroup.id }} class="card">
+            {{ m_widgets.add_participant(racinggroup,all_persons,all_yachts) }}
 	    <div class="card-header" id="headingOne">
 	      <h5 class="mb-0">
-		<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+		<button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ racinggroup.id }}-participants" aria-expanded="true" aria-controls="collapse-{{ racinggroup.id }}-participants">
 		Participants	
 		</button>
 	      </h5>
 	    </div>
-	    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+	    <div id="collapse-{{ racinggroup.id }}-participants" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
 	      <div class="card-body">
 		{% for participant in racinggroup.participants %}
                 <button type="button" id="participantButton" class="btn btn-info">
                     <i class="fas fa-align-left"></i>
-                    <span>{{ participant.yacht.sailnumber }} : {{ participant.person.firstname }}{{ participant.person.lastname }}</span>
+                    <span>{{ participant.yacht.sailnumber }} : {{ participant.person.firstname }} {{ participant.person.lastname }}</span>
                 </button>
 		{% endfor %}
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addParticipant[data-racinggroup-id='{{racinggroup.id}}']">Add</button>
 	      </div>
 	    </div>
 	  </div>
 	<div id="configure-marks" racinggroup-id={{ racinggroup.id }} class="card">
 	    <div class="card-header" id="headingOne">
 	      <h5 class="mb-0">
-		<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+		<button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ racinggroup.id }}-marks" aria-expanded="true" aria-controls="collapse-{{ racinggroup.id }}-marks">
 		Marks	
 		</button>
 	      </h5>
 	    </div>
-	    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+	    <div id="collapse-{{ racinggroup.id }}-marks" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
 	      <div class="card-body">
-		{% for yachtclass in racinggroup.yachtclasses %}
-                <button type="button" id="yachtClassButton" class="btn btn-info">
+		{% for mark in racinggroup.marks %}
+                <button type="button" id="markButton" class="btn btn-info">
                     <i class="fas fa-align-left"></i>
-                    <span>{{ yachtclass.name }}</span>
+                    <span>{{ mark.name }}</span>
                 </button>
 		{% endfor %}
 	      </div>
 	    </div>
 	  </div>
+	</div>
         {% endfor %}
         <button type="button" id="addRacingGroup" class="btn btn-info" onclick="addRacingGroup({{ race.id }});">
             <i class="fas fa-align-left"></i>

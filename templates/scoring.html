@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% import "menu.html" as m_menu %}
+{% import "widgets.html" as m_widgets %}
+{% import "heat.html" as m_heat %}
 {% block menu %}
     {{ m_menu.racemenu(race) }}
 {% endblock %}
@@ -11,9 +13,12 @@
                     <i class="fas fa-align-left"></i>
                     <span>Toggle Sidebar</span>
                 </button>
+                <div><h2>Heat:{{ heat.name }}</h2></div>
+                <div><h2>Start time:{{ heat.starttime }}</h2></div>
+                <div><span>{{ control_heat_buttons(heat) }}</span></div>
             </div>
         </nav>
-        <div id="scoring" heat-id="{{ heat_id }}">
+        <div id="scoring" heat-id="{{ heat.id }}">
         <div id="roundingGrid" class="table-responsive">
         </div>
         <div class="btn-toolbar" role="toolbar" aria-label="Scoring buttons">
@@ -27,3 +32,34 @@
     <!-- own code -->
     <script src="{{ request.host_url }}static/js/scoring.js"></script>
 {% endblock %}
+{% macro control_heat_buttons(heat) %}
+<!-- NOT_STARTED = 0 STARTED = 1 ENDED = 2 CANCELLED = 3-->
+{% if heat.status == 0 %}
+<div class="btn bg-secondary text-light"> Status: {{ m_heat.heat_status_text(heat) }}
+<button type="button" id="heatStatusButton" data-heat-id="{{ heat.id }}" data-id="1" class="btn btn-info">
+    <span>Start race</span>
+</button>
+{% elif heat.status == 1 %}
+<div class="btn bg-info text-light"> Status:
+{{ m_heat.heat_status_text(heat) }}
+<button type="button" id="heatStatusButton" data-heat-id="{{ heat.id }}" data-id="2" class="btn btn-info">
+    <span>End valid race</span>
+</button>
+<button type="button" id="heatStatusButton" data-heat-id="{{ heat.id }}" data-id="3" class="btn btn-info">
+    <span>Cancel race</span>
+</button>
+{% elif heat.status == 2 %}
+<div class="btn bg-success text-light"> Status:
+{{ m_heat.heat_status_text(heat) }}
+<button type="button" id="heatStatusButton" data-heat-id="{{ heat.id }}" data-id="3" class="btn btn-info">
+    <span>Cancel race</span>
+</button>
+<button type="button" id="heatStatusButton" data-heat-id="{{ heat.id }}" data-id="1" class="btn btn-info">
+    <span>Start race</span>
+</button>
+{% else %}
+<div class="btn bg-warning text-light"> Status:
+{{ m_heat.heat_status_text(heat) }}
+{% endif %}
+</div>
+{% endmacro %}

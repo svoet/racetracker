@@ -3,6 +3,7 @@ var specUrl = '/api/swagger.json';
 var swaggerClient = new SwaggerClient({url:specUrl,disableInterfaces: false});
 loadScoringButtons();
 loadRoundings();
+var scoringLastPass=0
 
 function loadScoringButtons() {
 swaggerClient.then(function(client) {
@@ -10,7 +11,11 @@ swaggerClient.then(function(client) {
   client.apis.Heats.api_heats_getParticipants({'heat_id':heatid})
     .then(function(participants) {
       var items = [];
-      $.each( participants.obj, function( key, obj ) {
+      //sorted=participants.obj.sort(sortByPassingOrder);
+      //for (i=0;i<sorted.length;i++){
+        //items.push( "<button type='button' class='btn btn-secondary btn-rounding' participant-id='" + sorted[i].participant.id + "'>" + sorted[i].participant.yacht.sailnumber + " (" + sorted[i].position + ")</button>" );
+      //}
+      $.each( participants.obj.sort(sortByPassingOrder), function( key, obj ) {
 	items.push( "<button type='button' class='btn btn-secondary btn-rounding' participant-id='" + obj.participant.id + "'>" + obj.participant.yacht.sailnumber + " (" + obj.position + ")</button>" );
       });
      
@@ -21,9 +26,8 @@ swaggerClient.then(function(client) {
         participant_id = parseInt($(this).attr("participant-id"),10);
         swaggerClient.then(function(client) {
             client.apis.Heats.api_heats_addRounding({'heat_id':heatid,'object':{participant_id:participant_id,'mark_id':1}})
-        swaggerClient
-        loadScoringButtons();
-        loadRoundings();
+        //swaggerClient
+            .then(function(){loadScoringButtons();loadRoundings()});
         });
     });
 
@@ -59,3 +63,25 @@ swaggerClient.then(function(client) {
 });
 }
 
+//heat status update buttons
+$(document).ready(function(){
+  $("button#heatStatusButton").click(function() {
+    var e=this;
+    swaggerClient.then(function(client) {
+      return client.apis.Heats.put_heats__object_id_({'object_id':parseInt($(e).attr("data-heat-id"),10),'object':{'status':parseInt($(e).attr('data-id'),10)}})
+      })
+      .then(function(){return location.reload()});
+  });
+});
+
+function sortByPassingOrder(a, b){
+      var aPassingOrder = a.passing_order;
+      var bPassingOrder = b.passing_order;
+      return ((aPassingOrder < bPassingOrder) ? -1 : ((aPassingOrder > bPassingOrder) ? 1 : 0));
+}
+
+function sortByLastPass(a, b){
+      var aPassingOrder = a.passing_order;
+      var bPassingOrder = b.passing_order;
+      return ((aPassingOrder < bPassingOrder) ? -1 : ((aPassingOrder > bPassingOrder) ? 1 : 0));
+}

@@ -7,6 +7,7 @@ RUN pip install -r /requirements.txt
 
 COPY . /app
 WORKDIR /app
+RUN mkdir -p /app/data
 
 RUN python ./initdb_test.py 
 

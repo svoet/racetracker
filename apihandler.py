@@ -1,4 +1,6 @@
 import config
+from flask import abort
+
 class GenericAPIHandler():
     object_class = None
     schema_class = None
@@ -61,18 +63,22 @@ class GenericAPIHandler():
         # Can we insert this object?
         if existing_object is None:
 
-            # Create a object instance using the schema and the passed in object
-            schema = self.schema_class()
-            new_object = schema.load(object, session=config.db.session)
+            try:
+                # Create a object instance using the schema and the passed in object
+                schema = self.schema_class()
+                new_object = schema.load(object, session=config.db.session)
 
-            # Add the object to the database
-            config.db.session.add(new_object)
-            config.db.session.commit()
+                # Add the object to the database
+                config.db.session.add(new_object)
+                config.db.session.commit()
 
-            # Serialize and return the newly created object in the response
-            data = schema.dump(new_object)
+                # Serialize and return the newly created object in the response
+                data = schema.dump(new_object)
 
-            return data, 201
+                return data, 201
+            except Exception as e:
+                config.db.session.rollback()
+                abort("Error while executing transaction:{}".format(str(e)))
 
         # Otherwise, nope, object exists already
         else:

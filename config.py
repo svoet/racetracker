@@ -5,6 +5,7 @@ from flask_marshmallow import Marshmallow
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+dbfile=os.path.join(basedir,'data', 'racetracker.db')
 
 # Create the Connexion application instance
 connex_app = connexion.App(__name__, specification_dir=os.path.join(basedir,'swagger'))
@@ -14,7 +15,7 @@ app = connex_app.app
 
 # Configure the SQLAlchemy part of the app instance
 app.config['SQLALCHEMY_ECHO'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////' + os.path.join(basedir, 'racetracker.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////' + dbfile
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Create the SQLAlchemy db instance
