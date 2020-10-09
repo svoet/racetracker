@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% import "widgets.html" as m_widgets %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Login</h3>
+    <div class="box">
+        {{ m_widgets.loginform() }}
+    </div>
+</div>
+{% endblock %}
+

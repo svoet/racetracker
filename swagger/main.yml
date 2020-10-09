@@ -914,6 +914,8 @@ definitions:
         type: string
       race_id:
         type: integer 
+      tracklength:
+        type: integer 
       participants:
         type: array
         items:
@@ -930,6 +932,8 @@ definitions:
     type: object
     properties:
       race_id:
+        type: integer 
+      tracklength:
         type: integer 
       name:
         type: string

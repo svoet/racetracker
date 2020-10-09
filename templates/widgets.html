@@ -1,3 +1,37 @@
+{% macro loginform(user=None) %}
+    {% if user and user.is_authenticated %}
+    <div>{{ user.firstname }} {{ user.lastname }}</div>
+    <div class="btn btn-primary"><a href="/logout">Logout</a></div>
+    {% else %}
+        <form method="POST" action="/login">
+            <div class="form-group col-md-12">
+              <label for="inputLoginEmail">Email</label>
+              <input type="email" class="form-control person" id="inputLoginEmail" name="email" placeholder="Your Email" autofocus="">
+            </div>
+            <div class="form-group col-md-12">
+              <label for="inputLoginPassword">Password</label>
+               <input class="form-control person" type="password" name="password" placeholder="Your Password" id="inputLoginPassword">
+            </div>
+            <div class="field">
+                <label for="inputLoginRemember" class="checkbox">
+                    <input type="checkbox" id="inputLoginRemember">
+                    Remember me
+                </label>
+            </div>
+            <button class="btn btn-primary">Login</button>
+            <div class="btn btn-secondary"><a href="{{ url_for('auth.signup') }}" class="navbar-item"> Sign Up </a></a>
+        </form>
+    {% endif %}
+{% endmacro %}
+{% macro loginform_short(user) %}
+    {% if user.is_authenticated %}
+    <div>{{ user.firstname }} {{ user.lastname }}</div>
+    <a href="/logout">Logout</a>
+    {% else %}
+        <a href="{{ url_for('auth.login') }}" class="navbar-item"> Login </a>
+        <a href="{{ url_for('auth.signup') }}" class="navbar-item"> Sign Up </a>
+    {% endif %}
+{% endmacro %}
 {% macro add_participant(racinggroup,persons,yachts) %}
 <div class="modal fade" id="addParticipant" tabindex="-1" role="dialog" aria-labelledby="addParticipantLabel" aria-hidden="true" data-racinggroup-id="{{ racinggroup.id}}">
   <div class="modal-dialog" role="document">
@@ -75,6 +109,48 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="save" data-racinggroup-id="{{racinggroup.id}}">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro update_rounding_modal(heat,racinggroup) %}
+<div class="modal fade" id="updateRounding" tabindex="-1" role="dialog" aria-labelledby="updateRoundingLabel" aria-hidden="true" data-heat-id="{{ heat.id}}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateRoundingLabel">Update Rounding</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <div class="modal-body" >
+      <div class="container-fluid">
+        <form id="updateRounding">
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="inputOverriddenTime4">Time</label>
+              <input type="text" class="form-control person" id="inputOverriddenTime4" placeholder="2020-10-20 08:00:00" name="overriddentime">
+            </div>
+          </div>
+            <div class="form-group col-md-4">
+              <label for="inputParticipant4">Participant</label>
+              <select id="inputParticipant4" class="form-control">
+                <option selected>Choose...</option>
+                {% for participant in racinggroup.participants %}
+                <option data-id="{{ participant.id }}">{{participant.yacht.sailnumber}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          <input type="hidden" id="participantId" name="participant_id">
+        </form>
+    </div>
+</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="save" data-racinggroup-id="{{racinggroup.id}}">Save changes</button>
+        <button type="button" class="btn btn-danger" id="delete">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

@@ -4,17 +4,31 @@
 {% block menu %}
 {% endblock %}
 {% block content %}
-<div class="main">
-    {% for race in races %}
-<div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="..." alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title">{{ race.name }}</h5>
-    <p class="card-text">This race starts on {{ race.starttime }}</p>
-    <a href="{{ request.host_url }}race/{{ race.id }}" class="btn btn-primary">Configure race</a>
-    <a href="{{ request.host_url }}race/{{ race.id }}/live" class="btn btn-primary">Follow live</a>
-  </div>
-</div>
-    {% endfor %}
+<div id="content" class="active">
+    <div class="main">
+        <div class="card-group">
+        {% for race in races %}
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="..." alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">{{ race.name }}</h5>
+            <p class="card-text">This race starts on {{ race.starttime }}</p>
+            <a href="{{ request.host_url }}race/{{ race.id }}" class="btn btn-primary">Configure race</a>
+            <a href="{{ request.host_url }}race/{{ race.id }}/live" class="btn btn-primary">Follow live</a>
+          </div>
+        </div>
+        {% endfor %}
+        {% if current_user.is_authenticated %}
+          <div class="card" style="width: 18rem;">
+              <span style="font-size: 9em; color: Dodgerblue; text-align:center;">
+              <i class="fas fa-plus-square"></i>
+              </span>
+          </div>
+        {% endif %}
+      <div class="card" style="width: 18rem;">
+            {{ m_widgets.loginform(current_user) }}
+      </div>
+      </div>
+    </div>
 </div>
 {% endblock content %}

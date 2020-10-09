@@ -9,7 +9,5 @@ COPY . /app
 WORKDIR /app
 RUN mkdir -p /app/data
 
-RUN python ./initdb_test.py 
-
 EXPOSE 5000
 CMD ["python","./main.py"]

@@ -43,20 +43,20 @@ $(document).ready(function(){
   });
 
   $("#listPilots button.pilot").on("click", function() {
-	$("form#addParticipant input#personId").val($(this).attr("data-id"));
-	$("form#addParticipant input#inputFirstname4").val($(this).attr("data-firstname"));
-	$("form#addParticipant input#inputLastname4").val($(this).attr("data-lastname"));
-	$("form#addParticipant input#inputEmail4").val($(this).attr("data-email"));
+    $("form#addParticipant input#personId").val($(this).attr("data-id"));
+    $("form#addParticipant input#inputFirstname4").val($(this).attr("data-firstname"));
+    $("form#addParticipant input#inputLastname4").val($(this).attr("data-lastname"));
+    $("form#addParticipant input#inputEmail4").val($(this).attr("data-email"));
   });
 
   $("#listYachts button.yacht").on("click", function() {
-	$("form#addParticipant input#yachtId").val($(this).attr("data-id"));
-	$("form#addParticipant input#inputSailnumber4").val($(this).text());
-	$("form#addParticipant #inputClass.option[data-id=" + $(this).attr("data-yachtclass-id") +"]").attr("selected","selected");
+    $("form#addParticipant input#yachtId").val($(this).attr("data-id"));
+    $("form#addParticipant input#inputSailnumber4").val($(this).text());
+    $("form#addParticipant #inputClass.option[data-id=" + $(this).attr("data-yachtclass-id") +"]").attr("selected","selected");
   });
 
   $("form#addParticipant select#inputClass4").change(function() {
-	$("form#addParticipant input#yachtClassId").val($(this).children("option:selected").attr("data-id"));
+    $("form#addParticipant input#yachtClassId").val($(this).children("option:selected").attr("data-id"));
   });
 
   $("div#addParticipant button#save").on("click", function() {
@@ -74,6 +74,18 @@ $(document).ready(function(){
           console.log('addParticipant', json);
           console.log('client', client);
           client.apis.RacingGroups.api_racinggroups_addParticipant({'racinggroup_id':racinggroup_id,'object':json}).then(
+                  function(){cleanForm();location.reload(); return false;});
+        });
+  });
+
+  //update Track Length form on racinggroup->marks
+  $("form#updateTrackLength button#save").on("click", function() {
+        var racinggroup_id=$(this).attr("data-racinggroup-id");
+        swaggerClient.then(function(client) {
+          var json={};
+          json['tracklength']=parseInt( $("form#updateTrackLength input#inputTrackLength4").val(),10);
+          console.log('client', client);
+          client.apis.RacingGroups.put_racinggroups__object_id_({'object_id':racinggroup_id,'object':json}).then(
                   function(){cleanForm();location.reload(); return false;});
         });
   });

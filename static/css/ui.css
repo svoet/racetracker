@@ -8,6 +8,7 @@ body {
     background: #fafafa;
 }
 
+
 p {
     font-family: 'Poppins', sans-serif;
     font-size: 1.1em;
@@ -151,7 +152,7 @@ a.article:hover {
 
 #content {
     width: calc(100% - 250px);
-    padding: 40px;
+    padding: 20px;
     min-height: 100vh;
     transition: all 0.3s;
     position: absolute;
@@ -212,4 +213,33 @@ a.article:hover {
     /* top right corner of the sidebar */
     top: 10px;
     right: 10px;
+}
+
+#roundingGrid {
+    height:75%;
+}
+#scoring {
+    max-height:75%;
+}
+
+.bottom {
+    position:fixed;
+    bottom:0px;
+    width: 100%;
+    min-height:30px; 
+}
+.nopadding {
+    padding: 0;
+    margin: -20px;
+}
+
+.top {
+    position:sticky;
+    top:0;
+    width: 100%;
+}
+
+video {
+   width: 640px;
+  /* height: 360px;*/
 }

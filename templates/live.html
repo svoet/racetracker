@@ -1,29 +1,68 @@
 {% extends "base.html" %}
 {% import "menu.html" as m_menu %}
 {% block menu %}
-    {{ m_menu.racemenu(race) }}
 {% endblock %}
 {% block content %}
 <div class="main">
     <!-- Page Content -->
-    <div id="content">
+    <div id="content" class="active">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-
-                <button type="button" id="sidebarCollapse" class="btn btn-info">
-                    <i class="fas fa-align-left"></i>
-                    <span>Toggle Sidebar</span>
-                </button>
             </div>
         </nav>
+            <div class="card">
+                <div class="card-header" id="heading_webcam">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-webcam" aria-expanded="true" aria-controls="collapse-webcam">
+                               Webcam 
+                            </button>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <div id="collapse-webcam" class="collapse show" aria-labelledby="heading_webcam" data-parent="#live">
+                    <div class="card-body" id="body_webcam">
+                       <video data-dashjs-player autoplay src="http://webcam.rsyc.be/live/glass_live_manifest.mpd" controls></video>
+                    </div>
+                </div>
+            </div>
+        {% for racinggroup in race.racinggroups %}
+	<p>{{ racinggroup.name }}</p>
         <div id="live" race-id="{{ race.id }}">
-            <div id="liveGrid" class="table-responsive">
+            <div racinggroup-id={{ racinggroup.id }} class="card">
+                <div class="card-header" id="heading_{{racinggroup.id}}">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ racinggroup.id }}" aria-expanded="true" aria-controls="collapse-{{ racinggroup.id }}">
+                                    {{ racinggroup.name }}
+                                </button>
+                                </h5>
+                            </div>
+                            <div class="col-md-3" id="heat_name_rg_{{ racinggroup.id }}">
+                            </div>
+                            <div class="col-md-3" id="heat_status_rg_{{ racinggroup.id }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="collapse-{{ racinggroup.id }}" class="collapse show" aria-labelledby="heading_{{ racinggroup.id }}" data-parent="#live">
+                    <div class="card-body" id="body_{{ racinggroup.id }}">
+                        <div id="grid" class="table-responsive">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock content %}
 {% block specificjs %}
     <!-- own code -->
     <script src="{{ request.host_url }}static/js/live.js"></script>
+    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
 {% endblock %}

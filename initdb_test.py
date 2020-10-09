@@ -8,8 +8,8 @@ import api
 
 # Data to initialize database with
 RACES = [
-        {'name': 'Potjesregatta', 'starttime': '2020-09-21 08:00'},
-        {'name': '5 Hours De Panne for Standart','starttime':  '2020-10-10 08:00'}
+        {'name': 'Potjesregatta', 'starttime': '2020-09-21 08:00', 'account_id' : 1},
+        {'name': '5 Hours De Panne fo r Standart','starttime':  '2020-10-10 08:00', 'account_id' : 1}
 ]
 PERSONS = [
           {
@@ -23,6 +23,9 @@ PERSONS = [
                                         },
                 {
                         "countrycode": "BE", "firstname": "Ronny", "fislyid": "003", "id": 4, "lastname": "Nollet"
+                                          },
+                {
+                        "countrycode": "BE", "firstname": "Annemie", "fislyid": "003", "id": 5, "lastname": "Colaert"
                                           }
                 ]
 
@@ -75,6 +78,24 @@ PARTICIPANTS = [
               { "id": 3, "person_id": 3, "racinggroup_id": 1, "yacht_id": 3 },
                 { "id": 4, "person_id": 4, "racinggroup_id": 1, "yacht_id": 4 }
                 ]
+
+ACCOUNTS = [
+          { "id": 1, "name": "RSYC" }
+                  ]
+
+ENTITLEMENTS = [
+          { "id": 1, "person_id": 1, "role_id": 1, "account_id": 1 },
+          { "id": 1, "person_id": 5, "role_id": 4, "account_id": 1 },
+                 ]
+
+ROLES = [
+          { "id": 1, "name": "Administrator" },
+          { "id": 2, "name": "Account Administrator" },
+          { "id": 3, "name": "Race Organisor" },
+          { "id": 4, "name": "Scorer" },
+          { "id": 5, "name": "Participant" },
+          { "id": 6, "name": "None" },
+                 ]
 
 # Delete database file if it exists currently
 dbfile=os.path.join(basedir,'data', 'racetracker.db')

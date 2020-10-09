@@ -6,28 +6,38 @@
     {{ m_menu.racemenu(race) }}
 {% endblock %}
 {% block content %}
-<div class="main">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<div id="content">
+    {{ m_widgets.update_rounding_modal(heat,racinggroup) }}
+    <div class="main">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
             <div class="container-fluid">
                 <button type="button" id="sidebarCollapse" class="btn btn-info">
                     <i class="fas fa-align-left"></i>
                     <span>Toggle Sidebar</span>
                 </button>
-                <div><h2>Heat:{{ heat.name }}</h2></div>
-                <div><h2>Start time:{{ heat.starttime }}</h2></div>
-                <div><span>{{ control_heat_buttons(heat) }}</span></div>
+                <span class="navbar-text">Heat:{{ heat.name }}</span>
+                <div class="d-md-none d-lg-block"><span class="navbar-text">Start time:{{ heat.starttime }}</span></div>
+                <div class="navbar-collapse collapse">{{ control_heat_buttons(heat) }}</div>
             </div>
         </nav>
         <div id="scoring" heat-id="{{ heat.id }}">
-        <div id="roundingGrid" class="table-responsive">
-        </div>
-        <div class="btn-toolbar" role="toolbar" aria-label="Scoring buttons">
-            <div id="scoringButtons" class="btn-group mr-2" role="group" aria-label="Participants">
+            <div class="row">
+                <div id="roundingGrid" class="overflow-auto table-responsive">
             </div>
         </div>
     </div>
 </div>
 {% endblock content %}
+{% block footer %}
+    <div class="bottom">
+        <nav class="nopadding navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="btn-group btn-group-sm" role="toolbar" aria-label="Scoring buttons">
+                <div id="scoringButtons" class="btn-group mr-2" role="group" aria-label="Participants">
+                </div>
+            </div>
+        </nav>
+    </div>
+{% endblock %}
 {% block specificjs %}
     <!-- own code -->
     <script src="{{ request.host_url }}static/js/scoring.js"></script>

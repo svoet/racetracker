@@ -24,6 +24,11 @@ swaggerClient.then(function(client) {
 
     $("button.btn-rounding").click(function(){
         participant_id = parseInt($(this).attr("participant-id"),10);
+        //hide the button immediately for if the submission takes a while
+        $(this).addClass('d-none')
+        //Add the rounding to the grid immediately too
+	$('div#roundingGrid table').append( "<td><div class='' participant-id='" + participant_id + "'>" + $(this).text() + "</div></td>" );
+        //Submit the rounding
         swaggerClient.then(function(client) {
             client.apis.Heats.api_heats_addRounding({'heat_id':heatid,'object':{participant_id:participant_id,'mark_id':1}})
         //swaggerClient
@@ -52,13 +57,23 @@ swaggerClient.then(function(client) {
               items.push("</tr><tr>"); //make new row
           }
           ids.push(obj.participant_id);
+        console.log('obj', obj);
         date=new Date(obj.overriddentime);
-	items.push( "<td><div class='' participant-id='" + obj.participant.id + "'>" + obj.participant.yacht.sailnumber + " (" + date.toLocaleTimeString() + ")</div></td>" );
+        items.push( "<td><div class='roundingGridItem' data-rounding-id='"+obj.id+"' data-overriddentime='"+obj.overriddentime+"' data-participant-id='" + obj.participant_id + "'>" + obj.participant.yacht.sailnumber + " (" + date.toLocaleTimeString() + ")</div></td>" );
       });
-     
+ 
       items.push("</tr>");
       $("div#roundingGrid").html("");
       $( "<table/>", { "class": "table table-striped table-bordered table-sm", html: items.join( "" ) }).appendTo( "div#roundingGrid" );
+
+      $(".roundingGridItem").click(function(){
+      $('#updateRounding').attr('data-rounding-id',$(this).attr('data-rounding-id'));
+      $('#updateRounding #inputOverriddenTime4').val($(this).attr('data-overriddentime'));
+      $('#updateRounding #inputHeatId4').val($(this).attr('data-heat-id'));
+      $('#updateRounding #inputParticipant4 option').removeAttr('selected');
+      $('#updateRounding #inputParticipant4 option[data-id='+$(this).attr('data-participant-id')+']').attr('selected','selected');
+
+      $('#updateRounding').modal('show')});
     });
 });
 }
@@ -72,7 +87,41 @@ $(document).ready(function(){
       })
       .then(function(){return location.reload()});
   });
+
+    //updateRounding modal - save button
+  $("#updateRounding button#save").on("click", function() {
+        var rounding_id=$(this).attr("data-rounding-id");
+        swaggerClient.then(function(client) {
+          var json={};
+          $.each($("form#updateRounding").serializeArray(),function(i,fields){
+            //skip empty fields
+            if (fields.value == ""){return;}
+            //fields ending on _id are integer
+            if(fields.name.indexOf("_id") > -1) 
+            { json[fields.name]=parseInt(fields.value,10);}
+            else { json[fields.name]=fields.value;}
+          });
+          console.log('updateRounding', json);
+          console.log('client', client);
+          client.apis.Roundings.put_roundings__object_id_({'object_id':parseInt($('#updateRounding').attr("data-rounding-id"),10),'object':json}).then(
+                  function(){$('#updateRounding').modal('hide');loadRoundings(); return false;});
+        });
+  });
+
+    //updateRounding modal - delete button
+  $("#updateRounding button#delete").on("click", function() {
+        var rounding_id=$(this).attr("data-rounding-id");
+        swaggerClient.then(function(client) {
+          client.apis.Roundings.delete_roundings__object_id_({'object_id':parseInt($('#updateRounding').attr("data-rounding-id"),10)}).then(
+                  function(){$('#updateRounding').modal('hide');loadRoundings(); return false;});
+        });
+  });
+    //updateRounding modal - sets the selected participant into hidden form field
+    $("#updateRounding select#inputParticipant4").change(function() {
+    $("#updateRounding input#participantId").val($(this).children("option:selected").attr("data-id"));
+    });
 });
+
 
 function sortByPassingOrder(a, b){
       var aPassingOrder = a.passing_order;

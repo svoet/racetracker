@@ -1,14 +1,22 @@
 from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
+from flask_login import UserMixin
 from marshmallow import ValidationError
 from apihandler import GenericAPIHandler
 import datetime
 import pdb
 import config
+import dateutil.parser
 from enum import Enum
 
 
+
+class Account (config.db.Model):
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    entitlements = relationship('Entitlement',backref='account',lazy='select')
+    races = relationship('Race',backref="account")
 
 class Heat(config.db.Model):
     class HeatStatus():
@@ -32,7 +40,6 @@ class Heat(config.db.Model):
     name = Column(String,default=defaultName)
     status = Column(Integer,default=HeatStatus.NOT_STARTED)
 
-
 class Mark(config.db.Model):
     __tablename__ = 'mark'
     id = Column(Integer, primary_key=True)
@@ -49,7 +56,7 @@ class Participant(config.db.Model):
     person_id = Column(Integer, ForeignKey('person.id'))
     roundings = relationship( 'Rounding',backref="participant")
 
-class Person(config.db.Model):
+class Person(UserMixin,config.db.Model):
     __tablename__ = 'person'
     id = Column(Integer, primary_key=True)
     firstname = Column(String)
@@ -57,13 +64,45 @@ class Person(config.db.Model):
     countrycode = Column(String)
     fislyid = Column(String)
     email = Column(String)
+    password = Column(String)
     participants = relationship( 'Participant',backref="person")
     yachts = relationship('Yacht', secondary = 'person_yacht_link')
+    entitlements = relationship('Entitlement',backref='person',lazy='select')
+    authenticated = False #TODO, do we need to store this in DB?
+
+    def is_active(self):
+        """True, as all users are active."""
+        return True
+
+    def get_id(self):
+        """Return the email address to satisfy Flask-Login's requirements."""
+        return self.email
+
+    def is_authenticated(self):
+        """Return True if the user is authenticated."""
+        return self.authenticated
+
+    def is_anonymous(self):
+        """False, as anonymous users aren't supported."""
+        return False
 
 class PersonYachtLink(config.db.Model):
     __tablename__ = 'person_yacht_link'
     person_id = Column(Integer, ForeignKey('person.id'),primary_key=True)
     yacht_id = Column(Integer, ForeignKey('yacht.id'),primary_key=True)
+
+class Role(config.db.Model):
+    __tablename__ = 'role'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    entitlements = relationship('Entitlement',backref='role',lazy='select')
+
+class Entitlement(config.db.Model):
+    __tablename__ = 'person_role_link'
+    id = Column(Integer, primary_key=True)
+    account_id = Column(Integer, ForeignKey('account.id'))
+    role_id = Column(Integer, ForeignKey('role.id'))
+    person_id = Column(Integer, ForeignKey('person.id'))
 
 class Race(config.db.Model):
     __tablename__ = 'race'
@@ -71,6 +110,7 @@ class Race(config.db.Model):
     name = Column(String)
     starttime = Column(DateTime)
     racinggroups = relationship('RacingGroup',backref='race',lazy='select')
+    account_id = Column(Integer, ForeignKey('account.id'))
 
 class RacingGroup(config.db.Model):
     __tablename__ = 'racinggroup'
@@ -80,6 +120,7 @@ class RacingGroup(config.db.Model):
     participants = relationship( 'Participant',backref="racinggroup")
     heats = relationship('Heat',backref="racinggroup")
     yachtclasses = relationship('YachtClass',secondary="racinggroup_yachtclass_link")
+    tracklength = Column(Integer) #Track length in meters
 
 class Rounding(config.db.Model):
     __tablename__ = 'rounding'
@@ -117,6 +158,12 @@ class RacingGroupYachtClassLink(config.db.Model):
     yachtclass_id = Column(Integer, ForeignKey('yachtclass.id'),primary_key=True)
 
 #SCHEMAS and APIHandlers from here
+class EntitlementSchema(config.ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Entitlement
+        sqla_session=config.db.session
+        load_instance = True
+
 class HeatSchema(config.ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Heat
@@ -131,7 +178,10 @@ class HeatAPIHandler(GenericAPIHandler):
     def getParticipants(self,heat_id):
         ret=[]
         try:
-            participants=racinggroup=Heat.query.filter(Heat.id == heat_id).one_or_none().racinggroup.participants
+            #participants=racinggroup=Heat.query.filter(Heat.id == heat_id).one_or_none().racinggroup.participants
+            heat=Heat.query.filter(Heat.id == heat_id).one_or_none()
+            racinggroup=heat.racinggroup
+            participants=racinggroup.participants
             roundings = Rounding.query.filter(Rounding.heat_id == heat_id).order_by(Rounding.overriddentime.desc()).all()
             #Group all roundings per participant
             #[ { participant: { ... }, position : 3, passing_order : 3, roundings: []}]
@@ -163,7 +213,7 @@ class HeatAPIHandler(GenericAPIHandler):
 
                     ret[i]['roundings'].append(RoundingSchema().dump(rounding))
 
-            #First, order all roundings from old to new, regardless of laps. That's the "passing order"
+            #First, order all participants last rounding from old to new, regardless of laps. That's the "passing order"
             #TODO: this only works for scoring on a single mark. for multiple marks ,we need to:
             #   -do passing order on the mark where the first pilot has last passed
             #   -then do passing order on the previous mark (Mark-1, not len(roundings))
@@ -174,6 +224,7 @@ class HeatAPIHandler(GenericAPIHandler):
                 ret[i]['passing_order']=passing_order
                 passing_order=passing_order+1
 
+            #Now order in amount of roundings descending to define the race position
             position=1
             ret.sort(key=lambda x:len(x['roundings']),reverse=True)
             for i in range(0,len(ret)):
@@ -182,9 +233,36 @@ class HeatAPIHandler(GenericAPIHandler):
                     position=position+1
                 else:
                     ret[i]['position']=len(ret)
+
+            #Calculate time delta
+            for i in range(0,len(ret)):
+                if i == 0:
+                    ret[i]['time_delta']=0
+                elif len(ret[i]['roundings']) == 0:
+                    continue
+                elif len(ret[0]['roundings']) == len(ret[i]['roundings']):
+                    leader_time=dateutil.parser.parse(ret[0]['roundings'][0]['overriddentime'])
+                    i_time=dateutil.parser.parse(ret[i]['roundings'][0]['overriddentime'])
+                    i_delta=i_time - leader_time
+                    ret[i]['time_delta']=i_delta.total_seconds()
+                else:
+                    ret[i]['time_delta']=0
+
+            #Calculate time delta
+            for i in range(0,len(ret)):
+                num_roundings=len(ret[i]['roundings'])
+                distance_total=racinggroup.tracklength * num_roundings
+                last_rounding_time=dateutil.parser.parse(ret[i]['roundings'][0]['overriddentime'])
+                prev_rounding_time=heat.starttime
+                if num_roundings > 1:
+                    prev_rounding_time=dateutil.parser.parse(ret[i]['roundings'][1]['overriddentime'])
+                ret[i]['avg_speed']=round((distance_total / 1000) / ((last_rounding_time - heat.starttime).total_seconds() / (60*60)),2)
+                ret[i]['last_lap_speed']=round((racinggroup.tracklength / 1000) / ((last_rounding_time - prev_rounding_time).total_seconds() / (60*60)),2)
+
+
         except Exception as e:
             config.app.logger.error(e)
-            pass
+            #pass
             #TODO log the error
 
         # Serialize the data for the response
@@ -332,6 +410,12 @@ class RacingGroupAPIHandler(GenericAPIHandler):
 
         heat['racinggroup_id'] = racinggroup_id
         return HeatAPIHandler().post(heat)
+
+class RoleSchema(config.ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Role
+        sqla_session=config.db.session
+        load_instance = True
 
 class RoundingSchema(config.ma.SQLAlchemyAutoSchema):
     class Meta:
