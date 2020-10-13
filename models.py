@@ -45,7 +45,6 @@ class Mark(config.db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     order = Column(Integer)
-    racinggroup_id = Column(Integer, ForeignKey('racinggroup.id'))
     roundings = relationship('Rounding',backref='mark')
 
 class Participant(config.db.Model):
@@ -121,6 +120,7 @@ class RacingGroup(config.db.Model):
     heats = relationship('Heat',backref="racinggroup")
     yachtclasses = relationship('YachtClass',secondary="racinggroup_yachtclass_link")
     tracklength = Column(Integer) #Track length in meters
+    marks = relationship('Mark',secondary="racinggroup_mark_link")
 
 class Rounding(config.db.Model):
     __tablename__ = 'rounding'
@@ -156,6 +156,11 @@ class RacingGroupYachtClassLink(config.db.Model):
     __tablename__ = 'racinggroup_yachtclass_link'
     racinggroup_id = Column(Integer, ForeignKey('racinggroup.id'),primary_key=True)
     yachtclass_id = Column(Integer, ForeignKey('yachtclass.id'),primary_key=True)
+
+class RacingGroupMarkLink(config.db.Model):
+    __tablename__ = 'racinggroup_mark_link'
+    racinggroup_id = Column(Integer, ForeignKey('racinggroup.id'),primary_key=True)
+    mark_id = Column(Integer, ForeignKey('mark.id'),primary_key=True)
 
 #SCHEMAS and APIHandlers from here
 class EntitlementSchema(config.ma.SQLAlchemyAutoSchema):
@@ -265,13 +270,37 @@ class HeatAPIHandler(GenericAPIHandler):
             #pass
             #TODO log the error
 
-        # Serialize the data for the response
-        #schema = self.schema_class(many=True)
-        #data = scheconfig.ma.dump(objects)
         return ret
 
     def getRoundings(self,heat_id):
+        heat = Heat.query.filter(Heat.id == heat_id).one_or_none()
         roundings = Rounding.query.filter(Rounding.heat_id == heat_id).order_by(Rounding.overriddentime).all()
+
+        #each mark has its own scoring sequence. 0 is a default number for if no mark is configured
+        scoring_sequences={0:1}
+        for mark in heat.racinggroup.marks:
+            scoring_sequences[mark.id]=1
+
+        #set scoring sequence on each rounding
+        for rounding in roundings:
+            if rounding.mark_id == None:
+                rounding.mark_id=0
+            rounding.scoring_sequence=scoring_sequences[rounding.mark_id]
+            scoring_sequences[rounding.mark_id] += 1
+
+        #indicate leader (for making a new line on the scoring grid)
+        rounding_counts={}
+        max_roundings=0
+        for rounding in roundings:
+            if rounding_counts[rounding.participant.id] == None:
+                rounding_counts[rounding.participant.id]=1
+            else:
+                rounding_counts[rounding.participant.id]+=1
+
+            if rounding_counts[rounding.participant.id] > max_roundings:
+                rounding.is_leader=True
+                max_roundings=rounding_counts[rounding.participant.id]
+
         return RoundingWithParticipantSchema(many=True).dump(roundings)
 
 
@@ -284,6 +313,15 @@ class HeatAPIHandler(GenericAPIHandler):
             raise ValidationError("Participant with id '{}' not found.".format(object['participant_id']))
         api=RoundingAPIHandler()
         api.post(object)
+
+    def setStatus(self,heat_id,object):
+        if object['status'] == Heat.HeatStatus.STARTED:
+            object['starttime']=datetime.datetime.now().isoformat()
+
+        if object['status'] == Heat.HeatStatus.ENDED or object['status'] == Heat.HeatStatus.CANCELLED:
+            object['endtime']=datetime.datetime.now().isoformat()
+        object['id']=heat_id
+        self.put(heat_id,object)
 
 class MarkSchema(config.ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -332,7 +370,7 @@ class RaceSchema(config.ma.SQLAlchemyAutoSchema):
         include_fk = True
         include_relationships=True
 
-    racinggroups = config.ma.Nested('RacingGroupSchema',many=True,only=('id','name','heats','yachtclasses','participants'))
+    racinggroups = config.ma.Nested('RacingGroupSchema',many=True,only=('id','name','heats','yachtclasses','participants','tracklength','marks'))
 
 class RaceAPIHandler(GenericAPIHandler):
     object_class = Race
@@ -350,6 +388,7 @@ class RacingGroupSchema(config.ma.SQLAlchemyAutoSchema):
     heats = config.ma.Nested('HeatSchema',many=True,only=('id','starttime','endtime','status','name'))
     participants = config.ma.Nested('ParticipantSchema',many=True,only=('id','yacht','person'))
     yachtclasses = config.ma.Nested('YachtClassSchema',many=True,only=('id','code','description'))
+    marks = config.ma.Nested('MarkSchema',many=True,only=('id','name','order'))
 
 class RacingGroupAPIHandler(GenericAPIHandler):
     object_class = RacingGroup
@@ -402,6 +441,24 @@ class RacingGroupAPIHandler(GenericAPIHandler):
             config.db.session.add(yachtclass)
             config.db.session.commit()
 
+    def addMark(self,racinggroup_id,mark_id):
+        mark=Mark.query.filter(Mark.id == mark_id).one_or_none()
+        racinggroup=RacingGroup.query.filter(RacingGroup.id == racinggroup_id).one_or_none()
+
+        if mark and racinggroup:
+            racinggroup.marks.append(mark)
+            config.db.session.add(mark)
+            config.db.session.commit()
+
+    def removeMark(self,racinggroup_id,mark_id):
+        mark=Mark.query.filter(Mark.id == mark_id).one_or_none()
+        racinggroup=RacingGroup.query.filter(RacingGroup.id == racinggroup_id).one_or_none()
+
+        if mark and racinggroup:
+            racinggroup.marks.remove(mark)
+            config.db.session.add(mark)
+            config.db.session.commit()
+
     def addHeat(self,racinggroup_id,heat={}):
         racinggroup=RacingGroup.query.filter(RacingGroup.id == racinggroup_id).one_or_none()
 
@@ -426,6 +483,7 @@ class RoundingSchema(config.ma.SQLAlchemyAutoSchema):
 
 class RoundingWithParticipantSchema(RoundingSchema):
     participant = config.ma.Nested('ParticipantSchema',only=('yacht','person'))
+    scoring_sequence = config.ma.Integer()
 
 class RoundingAPIHandler(GenericAPIHandler):
     object_class = Rounding
