@@ -1,0 +1,6 @@
+gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://eu.gcr.io
+gcloud container clusters get-credentials chunkserver-gke-1-cluster --zone europe-west2-a
+kubectl get --all-namespaces services
+gcloud auth application-default login
+kompose convert
+kubectl apply -f racetracker-web-deployment.yaml,racetracker-web-service.yaml,data-persistentvolumeclaim.yaml

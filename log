@@ -1,0 +1,473 @@
+ * Serving Flask app "config" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 175-202-618
+2020-09-28 22:08:10,759 INFO sqlalchemy.engine.base.Engine SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+2020-09-28 22:08:10,768 INFO sqlalchemy.engine.base.Engine ()
+2020-09-28 22:08:10,773 INFO sqlalchemy.engine.base.Engine SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+2020-09-28 22:08:10,773 INFO sqlalchemy.engine.base.Engine ()
+2020-09-28 22:08:10,775 INFO sqlalchemy.engine.base.Engine BEGIN (implicit)
+2020-09-28 22:08:10,780 INFO sqlalchemy.engine.base.Engine SELECT race.id AS race_id, race.name AS race_name, race.starttime AS race_starttime 
+FROM race 
+WHERE race.id = ?
+2020-09-28 22:08:10,788 INFO sqlalchemy.engine.base.Engine ('1',)
+2020-09-28 22:08:10,818 INFO sqlalchemy.engine.base.Engine SELECT racinggroup.id AS racinggroup_id, racinggroup.name AS racinggroup_name, racinggroup.race_id AS racinggroup_race_id 
+FROM racinggroup 
+WHERE ? = racinggroup.race_id
+2020-09-28 22:08:10,824 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:10,848 INFO sqlalchemy.engine.base.Engine SELECT yachtclass.id AS yachtclass_id, yachtclass.code AS yachtclass_code, yachtclass.description AS yachtclass_description 
+FROM yachtclass, racinggroup_yachtclass_link 
+WHERE ? = racinggroup_yachtclass_link.racinggroup_id AND yachtclass.id = racinggroup_yachtclass_link.yachtclass_id
+2020-09-28 22:08:10,849 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:10,865 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE ? = participant.racinggroup_id
+2020-09-28 22:08:10,865 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:10,880 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:10,881 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:10,898 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:10,899 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:10,907 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:10,907 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:10,913 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:10,914 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:10,919 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:10,919 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:10,925 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:10,925 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:10,931 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:10,932 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:10,937 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:10,938 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:10,943 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:10,944 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:10,949 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:10,950 INFO sqlalchemy.engine.base.Engine (8,)
+2020-09-28 22:08:10,963 INFO sqlalchemy.engine.base.Engine SELECT heat.id AS heat_id, heat.racinggroup_id AS heat_racinggroup_id, heat.starttime AS heat_starttime, heat.endtime AS heat_endtime, heat.name AS heat_name, heat.status AS heat_status 
+FROM heat 
+WHERE ? = heat.racinggroup_id
+2020-09-28 22:08:10,964 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:10,976 INFO sqlalchemy.engine.base.Engine SELECT yachtclass.id AS yachtclass_id, yachtclass.code AS yachtclass_code, yachtclass.description AS yachtclass_description 
+FROM yachtclass, racinggroup_yachtclass_link 
+WHERE ? = racinggroup_yachtclass_link.racinggroup_id AND yachtclass.id = racinggroup_yachtclass_link.yachtclass_id
+2020-09-28 22:08:10,977 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:10,983 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE ? = participant.racinggroup_id
+2020-09-28 22:08:10,984 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:10,993 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:10,993 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:11,000 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:11,000 INFO sqlalchemy.engine.base.Engine (6,)
+2020-09-28 22:08:11,005 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:11,006 INFO sqlalchemy.engine.base.Engine (13,)
+2020-09-28 22:08:11,011 INFO sqlalchemy.engine.base.Engine SELECT heat.id AS heat_id, heat.racinggroup_id AS heat_racinggroup_id, heat.starttime AS heat_starttime, heat.endtime AS heat_endtime, heat.name AS heat_name, heat.status AS heat_status 
+FROM heat 
+WHERE ? = heat.racinggroup_id
+2020-09-28 22:08:11,012 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:11,022 INFO sqlalchemy.engine.base.Engine SELECT heat.id AS heat_id, heat.racinggroup_id AS heat_racinggroup_id, heat.starttime AS heat_starttime, heat.endtime AS heat_endtime, heat.name AS heat_name, heat.status AS heat_status 
+FROM heat 
+WHERE heat.id = ?
+2020-09-28 22:08:11,023 INFO sqlalchemy.engine.base.Engine ('5',)
+2020-09-28 22:08:11,286 INFO sqlalchemy.engine.base.Engine ROLLBACK
+192.168.2.6 - - [28/Sep/2020 22:08:11] "[37mGET /race/1/heat/5/scoring HTTP/1.1[0m" 200 -
+192.168.2.6 - - [28/Sep/2020 22:08:11] "[37mGET /static/css/ui.css HTTP/1.1[0m" 200 -
+192.168.2.6 - - [28/Sep/2020 22:08:11] "[37mGET /static/js/mainmenu.js HTTP/1.1[0m" 200 -
+192.168.2.6 - - [28/Sep/2020 22:08:11] "[37mGET /static/js/scoring.js HTTP/1.1[0m" 200 -
+192.168.2.6 - - [28/Sep/2020 22:08:12] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+192.168.2.6 - - [28/Sep/2020 22:08:14] "[37mGET /api/swagger.json HTTP/1.1[0m" 200 -
+2020-09-28 22:08:14,466 INFO sqlalchemy.engine.base.Engine BEGIN (implicit)
+2020-09-28 22:08:14,475 INFO sqlalchemy.engine.base.Engine SELECT heat.id AS heat_id, heat.racinggroup_id AS heat_racinggroup_id, heat.starttime AS heat_starttime, heat.endtime AS heat_endtime, heat.name AS heat_name, heat.status AS heat_status 
+FROM heat 
+WHERE heat.id = ?
+2020-09-28 22:08:14,471 INFO sqlalchemy.engine.base.Engine BEGIN (implicit)
+2020-09-28 22:08:14,476 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:14,496 INFO sqlalchemy.engine.base.Engine SELECT racinggroup.id AS racinggroup_id, racinggroup.name AS racinggroup_name, racinggroup.race_id AS racinggroup_race_id 
+FROM racinggroup 
+WHERE racinggroup.id = ?
+2020-09-28 22:08:14,498 INFO sqlalchemy.engine.base.Engine SELECT rounding.id AS rounding_id, rounding.participant_id AS rounding_participant_id, rounding.mark_id AS rounding_mark_id, rounding.heat_id AS rounding_heat_id, rounding.registeredtime AS rounding_registeredtime, rounding.overriddentime AS rounding_overriddentime 
+FROM rounding 
+WHERE rounding.heat_id = ? ORDER BY rounding.overriddentime
+2020-09-28 22:08:14,499 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:14,498 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:14,509 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE ? = participant.racinggroup_id
+2020-09-28 22:08:14,521 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:14,531 INFO sqlalchemy.engine.base.Engine SELECT rounding.id AS rounding_id, rounding.participant_id AS rounding_participant_id, rounding.mark_id AS rounding_mark_id, rounding.heat_id AS rounding_heat_id, rounding.registeredtime AS rounding_registeredtime, rounding.overriddentime AS rounding_overriddentime 
+FROM rounding 
+WHERE rounding.heat_id = ? ORDER BY rounding.overriddentime DESC
+2020-09-28 22:08:14,537 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:14,537 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE participant.id = ?
+2020-09-28 22:08:14,544 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:14,551 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:14,561 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:14,572 INFO sqlalchemy.engine.base.Engine SELECT yachtclass.id AS yachtclass_id, yachtclass.code AS yachtclass_code, yachtclass.description AS yachtclass_description 
+FROM yachtclass 
+WHERE yachtclass.id = ?
+2020-09-28 22:08:14,573 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:14,574 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:14,573 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:14,581 INFO sqlalchemy.engine.base.Engine SELECT yachtclass.id AS yachtclass_id, yachtclass.code AS yachtclass_code, yachtclass.description AS yachtclass_description 
+FROM yachtclass 
+WHERE yachtclass.id = ?
+2020-09-28 22:08:14,589 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:14,588 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:14,596 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:14,595 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:14,605 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:14,604 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE participant.id = ?
+2020-09-28 22:08:14,613 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:14,619 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:14,621 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:14,623 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:14,622 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:14,630 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:14,637 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:14,636 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:14,645 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:14,651 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE participant.id = ?
+2020-09-28 22:08:14,651 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:14,653 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:14,653 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:14,661 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:14,666 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:14,665 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:14,676 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:14,675 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:14,682 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:14,681 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:14,691 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:14,690 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:14,698 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:14,697 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE participant.id = ?
+2020-09-28 22:08:14,707 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:14,706 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:14,713 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:14,712 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:14,722 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:14,721 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:14,728 INFO sqlalchemy.engine.base.Engine (8,)
+2020-09-28 22:08:14,728 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:14,737 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:14,743 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE participant.id = ?
+2020-09-28 22:08:14,753 INFO sqlalchemy.engine.base.Engine (7,)
+2020-09-28 22:08:14,759 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:14,773 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:14,779 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:14,780 INFO sqlalchemy.engine.base.Engine (8,)
+2020-09-28 22:08:14,913 INFO sqlalchemy.engine.base.Engine ROLLBACK
+2020-09-28 22:08:14,917 INFO sqlalchemy.engine.base.Engine ROLLBACK
+192.168.2.6 - - [28/Sep/2020 22:08:14] "[37mGET /api/heats/5/getRoundings HTTP/1.1[0m" 200 -
+192.168.2.6 - - [28/Sep/2020 22:08:14] "[37mGET /api/heats/5/getParticipants HTTP/1.1[0m" 200 -
+2020-09-28 22:08:22,349 INFO sqlalchemy.engine.base.Engine BEGIN (implicit)
+2020-09-28 22:08:22,353 INFO sqlalchemy.engine.base.Engine SELECT race.id AS race_id, race.name AS race_name, race.starttime AS race_starttime 
+FROM race 
+WHERE race.id = ?
+2020-09-28 22:08:22,353 INFO sqlalchemy.engine.base.Engine ('1',)
+2020-09-28 22:08:22,365 INFO sqlalchemy.engine.base.Engine SELECT racinggroup.id AS racinggroup_id, racinggroup.name AS racinggroup_name, racinggroup.race_id AS racinggroup_race_id 
+FROM racinggroup 
+WHERE ? = racinggroup.race_id
+2020-09-28 22:08:22,366 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:22,377 INFO sqlalchemy.engine.base.Engine SELECT yachtclass.id AS yachtclass_id, yachtclass.code AS yachtclass_code, yachtclass.description AS yachtclass_description 
+FROM yachtclass, racinggroup_yachtclass_link 
+WHERE ? = racinggroup_yachtclass_link.racinggroup_id AND yachtclass.id = racinggroup_yachtclass_link.yachtclass_id
+2020-09-28 22:08:22,378 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:22,385 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE ? = participant.racinggroup_id
+2020-09-28 22:08:22,386 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:22,395 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:22,396 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:22,404 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:22,405 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:22,412 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:22,413 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:22,419 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:22,419 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:22,425 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:22,425 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:22,431 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:22,431 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:22,436 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:22,437 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:22,442 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:22,443 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:22,448 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:22,449 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:22,454 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:22,455 INFO sqlalchemy.engine.base.Engine (8,)
+2020-09-28 22:08:22,460 INFO sqlalchemy.engine.base.Engine SELECT heat.id AS heat_id, heat.racinggroup_id AS heat_racinggroup_id, heat.starttime AS heat_starttime, heat.endtime AS heat_endtime, heat.name AS heat_name, heat.status AS heat_status 
+FROM heat 
+WHERE ? = heat.racinggroup_id
+2020-09-28 22:08:22,460 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:22,471 INFO sqlalchemy.engine.base.Engine SELECT yachtclass.id AS yachtclass_id, yachtclass.code AS yachtclass_code, yachtclass.description AS yachtclass_description 
+FROM yachtclass, racinggroup_yachtclass_link 
+WHERE ? = racinggroup_yachtclass_link.racinggroup_id AND yachtclass.id = racinggroup_yachtclass_link.yachtclass_id
+2020-09-28 22:08:22,472 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:22,481 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE ? = participant.racinggroup_id
+2020-09-28 22:08:22,481 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:22,490 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:22,491 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:22,496 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:22,497 INFO sqlalchemy.engine.base.Engine (6,)
+2020-09-28 22:08:22,502 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:22,503 INFO sqlalchemy.engine.base.Engine (13,)
+2020-09-28 22:08:22,509 INFO sqlalchemy.engine.base.Engine SELECT heat.id AS heat_id, heat.racinggroup_id AS heat_racinggroup_id, heat.starttime AS heat_starttime, heat.endtime AS heat_endtime, heat.name AS heat_name, heat.status AS heat_status 
+FROM heat 
+WHERE ? = heat.racinggroup_id
+2020-09-28 22:08:22,509 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:22,520 INFO sqlalchemy.engine.base.Engine SELECT heat.id AS heat_id, heat.racinggroup_id AS heat_racinggroup_id, heat.starttime AS heat_starttime, heat.endtime AS heat_endtime, heat.name AS heat_name, heat.status AS heat_status 
+FROM heat 
+WHERE heat.id = ?
+2020-09-28 22:08:22,521 INFO sqlalchemy.engine.base.Engine ('5',)
+2020-09-28 22:08:22,533 INFO sqlalchemy.engine.base.Engine ROLLBACK
+192.168.2.6 - - [28/Sep/2020 22:08:22] "[37mGET /race/1/heat/5/scoring HTTP/1.1[0m" 200 -
+192.168.2.6 - - [28/Sep/2020 22:08:22] "[37mGET /static/css/ui.css HTTP/1.1[0m" 200 -
+192.168.2.6 - - [28/Sep/2020 22:08:22] "[37mGET /static/js/scoring.js HTTP/1.1[0m" 200 -
+192.168.2.6 - - [28/Sep/2020 22:08:22] "[37mGET /static/js/mainmenu.js HTTP/1.1[0m" 200 -
+192.168.2.6 - - [28/Sep/2020 22:08:24] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+192.168.2.6 - - [28/Sep/2020 22:08:25] "[37mGET /api/swagger.json HTTP/1.1[0m" 200 -
+2020-09-28 22:08:26,249 INFO sqlalchemy.engine.base.Engine BEGIN (implicit)
+2020-09-28 22:08:26,253 INFO sqlalchemy.engine.base.Engine SELECT heat.id AS heat_id, heat.racinggroup_id AS heat_racinggroup_id, heat.starttime AS heat_starttime, heat.endtime AS heat_endtime, heat.name AS heat_name, heat.status AS heat_status 
+FROM heat 
+WHERE heat.id = ?
+2020-09-28 22:08:26,258 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:26,257 INFO sqlalchemy.engine.base.Engine BEGIN (implicit)
+2020-09-28 22:08:26,263 INFO sqlalchemy.engine.base.Engine SELECT rounding.id AS rounding_id, rounding.participant_id AS rounding_participant_id, rounding.mark_id AS rounding_mark_id, rounding.heat_id AS rounding_heat_id, rounding.registeredtime AS rounding_registeredtime, rounding.overriddentime AS rounding_overriddentime 
+FROM rounding 
+WHERE rounding.heat_id = ? ORDER BY rounding.overriddentime
+2020-09-28 22:08:26,270 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:26,269 INFO sqlalchemy.engine.base.Engine SELECT racinggroup.id AS racinggroup_id, racinggroup.name AS racinggroup_name, racinggroup.race_id AS racinggroup_race_id 
+FROM racinggroup 
+WHERE racinggroup.id = ?
+2020-09-28 22:08:26,281 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:26,286 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE ? = participant.racinggroup_id
+2020-09-28 22:08:26,287 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:26,292 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE participant.id = ?
+2020-09-28 22:08:26,303 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:26,302 INFO sqlalchemy.engine.base.Engine SELECT rounding.id AS rounding_id, rounding.participant_id AS rounding_participant_id, rounding.mark_id AS rounding_mark_id, rounding.heat_id AS rounding_heat_id, rounding.registeredtime AS rounding_registeredtime, rounding.overriddentime AS rounding_overriddentime 
+FROM rounding 
+WHERE rounding.heat_id = ? ORDER BY rounding.overriddentime DESC
+2020-09-28 22:08:26,310 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:26,309 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:26,321 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:26,328 INFO sqlalchemy.engine.base.Engine SELECT yachtclass.id AS yachtclass_id, yachtclass.code AS yachtclass_code, yachtclass.description AS yachtclass_description 
+FROM yachtclass 
+WHERE yachtclass.id = ?
+2020-09-28 22:08:26,329 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:26,331 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:26,330 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:26,337 INFO sqlalchemy.engine.base.Engine SELECT yachtclass.id AS yachtclass_id, yachtclass.code AS yachtclass_code, yachtclass.description AS yachtclass_description 
+FROM yachtclass 
+WHERE yachtclass.id = ?
+2020-09-28 22:08:26,345 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:26,344 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:26,352 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:26,352 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:26,361 INFO sqlalchemy.engine.base.Engine (1,)
+2020-09-28 22:08:26,360 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE participant.id = ?
+2020-09-28 22:08:26,369 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:26,374 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:26,375 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:26,378 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:26,378 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:26,386 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:26,393 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:26,392 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:26,401 INFO sqlalchemy.engine.base.Engine (2,)
+2020-09-28 22:08:26,407 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE participant.id = ?
+2020-09-28 22:08:26,408 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:26,409 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:26,409 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:26,422 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:26,423 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:26,417 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:26,425 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:26,434 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:26,438 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:26,438 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:26,447 INFO sqlalchemy.engine.base.Engine (3,)
+2020-09-28 22:08:26,447 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:26,454 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:26,453 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE participant.id = ?
+2020-09-28 22:08:26,467 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:26,466 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:26,476 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:26,473 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:26,488 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:26,484 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:26,495 INFO sqlalchemy.engine.base.Engine (8,)
+2020-09-28 22:08:26,494 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:26,508 INFO sqlalchemy.engine.base.Engine (4,)
+2020-09-28 22:08:26,514 INFO sqlalchemy.engine.base.Engine SELECT participant.id AS participant_id, participant.racinggroup_id AS participant_racinggroup_id, participant.yacht_id AS participant_yacht_id, participant.person_id AS participant_person_id 
+FROM participant 
+WHERE participant.id = ?
+2020-09-28 22:08:26,529 INFO sqlalchemy.engine.base.Engine (7,)
+2020-09-28 22:08:26,535 INFO sqlalchemy.engine.base.Engine SELECT yacht.id AS yacht_id, yacht.sailnumber AS yacht_sailnumber, yacht.yachtclass_id AS yacht_yachtclass_id 
+FROM yacht 
+WHERE yacht.id = ?
+2020-09-28 22:08:26,552 INFO sqlalchemy.engine.base.Engine (5,)
+2020-09-28 22:08:26,558 INFO sqlalchemy.engine.base.Engine SELECT person.id AS person_id, person.firstname AS person_firstname, person.lastname AS person_lastname, person.countrycode AS person_countrycode, person.fislyid AS person_fislyid, person.email AS person_email 
+FROM person 
+WHERE person.id = ?
+2020-09-28 22:08:26,573 INFO sqlalchemy.engine.base.Engine (8,)
+2020-09-28 22:08:26,735 INFO sqlalchemy.engine.base.Engine ROLLBACK
+2020-09-28 22:08:26,743 INFO sqlalchemy.engine.base.Engine ROLLBACK
+192.168.2.6 - - [28/Sep/2020 22:08:26] "[37mGET /api/heats/5/getParticipants HTTP/1.1[0m" 200 -
+192.168.2.6 - - [28/Sep/2020 22:08:26] "[37mGET /api/heats/5/getRoundings HTTP/1.1[0m" 200 -

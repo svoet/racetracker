@@ -47,22 +47,22 @@ function loadRoundings(){
 swaggerClient.then(function(client) {
   console.log('client', client);
   client.apis.Heats.api_heats_getRoundings({'heat_id':heatid})
-    .then(function(roundings) {
+    .then(function(markwithroundings) {
       var items = [];
-      var ids = [];//ids list to check if participant appears in row already. purpose is to have each lap on new line
-      items.push("<tr>");
-      $.each( roundings.obj, function( key, obj ) {
-          if ( ids.includes(obj.participant_id)){
-              ids.length=0; //flush the ids list
-              items.push("</tr><tr>"); //make new row
-          }
-          ids.push(obj.participant_id);
-        console.log('obj', obj);
-        date=new Date(obj.overriddentime);
-        items.push( "<td><div class='roundingGridItem' data-rounding-id='"+obj.id+"' data-overriddentime='"+obj.overriddentime+"' data-participant-id='" + obj.participant_id + "'>" + obj.participant.yacht.sailnumber + " (" + date.toLocaleTimeString() + ")</div></td>" );
+      console.log('markwithroundings', markwithroundings);
+      $.each( markwithroundings.obj, function( key, markwithroundings ) {
+          items.push("<tr>");
+          $.each( markwithroundings.roundings, function( key, obj ) {
+              if ( obj.is_leader){
+                  items.push("</tr><tr>"); //make new row
+              }
+            date=new Date(obj.overriddentime);
+            //items.push( "<td><div class='roundingGridItem' data-rounding-id='"+obj.id+"' data-overriddentime='"+obj.overriddentime+"' data-participant-id='" + obj.participant_id + "'><div class='btn bg-dark text-white btn-sm'>"+obj.scoring_sequence+"</div>" + obj.participant.yacht.sailnumber + " (" + date.toLocaleTimeString() + ")</div></td>" );
+            items.push( "<td><div class='roundingGridItem btn-group' data-rounding-id='"+obj.id+"' data-overriddentime='"+obj.overriddentime+"' data-participant-id='" + obj.participant_id + "'><div class='btn bg-dark text-white btn-sm'>"+obj.scoring_sequence+"</div><div class='btn btn-sm btn-secondary'>" + date.toLocaleTimeString() + "</div><div class='btn btn-sm btn-secondary'>" + obj.participant.yacht.sailnumber + "</div></div></td>" );
+          });
       });
  
-      items.push("</tr>");
+      items.push("</tr");
       $("div#roundingGrid").html("");
       $( "<table/>", { "class": "table table-striped table-bordered table-sm", html: items.join( "" ) }).appendTo( "div#roundingGrid" );
 
@@ -83,7 +83,7 @@ $(document).ready(function(){
   $("button#heatStatusButton").click(function() {
     var e=this;
     swaggerClient.then(function(client) {
-      return client.apis.Heats.put_heats__object_id_({'object_id':parseInt($(e).attr("data-heat-id"),10),'object':{'status':parseInt($(e).attr('data-id'),10)}})
+      return client.apis.Heats.api_heats_setStatus({'heat_id':parseInt($(e).attr("data-heat-id"),10),'object':{'status':parseInt($(e).attr('data-id'),10)}})
       })
       .then(function(){return location.reload()});
   });

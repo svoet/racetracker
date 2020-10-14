@@ -151,7 +151,8 @@ a.article:hover {
 ----------------------------------------------------- */
 
 #content {
-    width: calc(100% - 250px);
+/*    width: calc(100% - 250px);*/
+    width: 100%;
     padding: 20px;
     min-height: 100vh;
     transition: all 0.3s;
@@ -167,7 +168,7 @@ a.article:hover {
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
-
+/*
 @media (max-width: 768px) {
     #sidebar {
         margin-left: -250px;
@@ -184,7 +185,7 @@ a.article:hover {
     #sidebarCollapse span {
         display: none;
     }
-}
+}*/
 
 .overlay {
     display: none;

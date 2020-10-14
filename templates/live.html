@@ -24,7 +24,7 @@
                 </div>
                 <div id="collapse-webcam" class="collapse show" aria-labelledby="heading_webcam" data-parent="#live">
                     <div class="card-body" id="body_webcam">
-                       <video data-dashjs-player autoplay src="http://webcam.rsyc.be/live/glass_live_manifest.mpd" controls></video>
+                       <video class="video-js" data-dashjs-player autoplay src="http://webcam.rsyc.be/live/glass_live_manifest.mpd" type="application/dash+xml" controls></video>
                     </div>
                 </div>
             </div>
@@ -65,4 +65,5 @@
     <!-- own code -->
     <script src="{{ request.host_url }}static/js/live.js"></script>
     <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+    <script src="{{ request.host_url }}static/js/videojs-dash.js"></script>
 {% endblock %}

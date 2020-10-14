@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"creationTimestamp":"2020-09-18T20:16:19Z","generateName":"racetracker-","labels":{"app":"racetracker"},"name":"racetracker-68vn2","namespace":"default","resourceVersion":"38759925","selfLink":"/api/v1/namespaces/default/services/racetracker-68vn2","uid":"d07304be-f9eb-11ea-94d6-42010a9a0113"},"spec":{"clusterIP":"10.97.5.150","externalTrafficPolicy":"Cluster","ports":[{"nodePort":32200,"port":80,"protocol":"TCP","targetPort":5000}],"selector":{"app":"racetracker"},"sessionAffinity":"None","type":"LoadBalancer"},"status":{"loadBalancer":{"ingress":[{"ip":"34.105.136.86"}]}}}
+  creationTimestamp: "2020-09-18T20:16:19Z"
+  generateName: racetracker-
+  labels:
+    app: racetracker
+  name: racetracker-68vn2
+  namespace: default
+  resourceVersion: "42564207"
+  selfLink: /api/v1/namespaces/default/services/racetracker-68vn2
+  uid: d07304be-f9eb-11ea-94d6-42010a9a0113
+spec:
+  clusterIP: 10.97.5.150
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 32200
+    port: 80
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: racetracker
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 34.105.136.86

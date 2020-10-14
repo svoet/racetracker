@@ -265,6 +265,45 @@ paths:
       responses:
         200:
           description: "Successful delete racinggroup operation"
+  /racinggroups/{racinggroup_id}/addMark/{mark_id}:
+    post:
+      operationId: api.racinggroups.addMark
+      tags:
+        - "RacingGroups"
+      summary: "Add a mark to a racinggroup"
+      description: "Add mark by id" 
+      parameters:
+        - in: path
+          name: racinggroup_id
+          required : true
+          type: integer
+        - in: path
+          name: mark_id
+          required : true
+          type: integer
+      responses:
+        200:
+          description: "Successful add Mark to racinggroup"
+          schema:
+            $ref: '#/definitions/RacingGroup'
+  /racinggroups/{racinggroup_id}/removeMark/{mark_id}:
+    delete:
+      operationId: api.racinggroups.removeMark
+      parameters:
+        - in: path
+          name: racinggroup_id
+          required : true
+          type: integer
+        - in: path
+          name: mark_id
+          required : true
+          type: integer
+      tags:
+        - "RacingGroups"
+      description: "Delete an existing Mark from racinggroup"
+      responses:
+        200:
+          description: "Successful delete racinggroup operation"
   /heats:
     get:
       tags:
@@ -391,7 +430,7 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: '#/definitions/RoundingWithParticipant'
+              $ref: '#/definitions/MarkWithRoundings'
   /heats/{heat_id}/addRounding:
     put:
       operationId: api.heats.addRounding
@@ -423,6 +462,35 @@ paths:
             type: object
             items:
               $ref: '#/definitions/Rounding'
+              type: object
+  /heats/{heat_id}/setStatus:
+    put:
+      operationId: api.heats.setStatus
+      parameters:
+        - in: path
+          name: heat_id
+          required : true
+          type: integer
+        - in: body 
+          name: object
+          required : true
+          schema: 
+            type: object
+            properties:
+              status:
+                type: integer
+                format: int64
+      tags:
+        - "Heats"
+      summary: "changes the status of a heat"
+      description: "This is to be used while scoring the heat"
+      responses:
+        200:
+          description: "Successful status update"
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Heat'
               type: object
   /marks:
     get:
@@ -1077,8 +1145,19 @@ definitions:
         type: string
       overriddentime:
         type: string
-  RoundingAdd:
+      scoring_sequence:
+        type: integer
+  MarkWithRoundings:
     type: object
+    properties:
+      mark:
+        $ref: '#/definitions/Mark'
+      roundings:
+        type: "array"
+        items:
+          $ref: '#/definitions/RoundingWithParticipant'
+  RoundingAdd:
+    type: object 
     properties:
       participant_id:
         type: integer
@@ -1091,7 +1170,7 @@ definitions:
       overriddentime:
         type: string
   YachtClass:
-    type: object
+    type: object 
     properties:
       id:
         type: integer

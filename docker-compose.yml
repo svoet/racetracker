@@ -1,0 +1,12 @@
+version: "2"
+services:
+  racetracker:
+    image: eu.gcr.io/rsyc-257718/racetracker:latest
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - data:/app/data
+volumes:
+  data:
+

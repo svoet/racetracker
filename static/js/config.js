@@ -9,8 +9,8 @@ function addRacingGroup(race_id) {
     });
 }
 
-//addParticipant model yacht filter
 $(document).ready(function(){
+//add or remove YachtClass from RacingGroup
   $("button#yachtClassButton").click(function() {
     var e=this;
     swaggerClient.then(function(client) {
@@ -24,6 +24,24 @@ $(document).ready(function(){
       else {
           client.apis.RacingGroups.api_racinggroups_addYachtClass({'racinggroup_id':$(e).closest("div#configure-classes").attr('racinggroup-id'),'yachtclass_id':$(e).attr('data-id')});
           $(e).attr('area-pressed',"true");
+      }
+    });
+  });
+
+//add or remove Mark from RacingGroup
+  $("button#markButton").click(function() {
+    var e=this;
+    swaggerClient.then(function(client) {
+      console.log('client', client);
+      //turn it off
+      if ($(e).attr('area-pressed') == "true") {
+          client.apis.RacingGroups.api_racinggroups_removeMark({'racinggroup_id':$(e).closest("div#configure-marks").attr('racinggroup-id'),'mark_id':$(e).attr('data-id')}).
+              then( $(e).attr('area-pressed',"false"));
+          }
+      //turn it on
+      else {
+          client.apis.RacingGroups.api_racinggroups_addMark({'racinggroup_id':$(e).closest("div#configure-marks").attr('racinggroup-id'),'mark_id':$(e).attr('data-id')})
+              .then( $(e).attr('area-pressed',"true"));
       }
     });
   });
@@ -79,8 +97,10 @@ $(document).ready(function(){
   });
 
   //update Track Length form on racinggroup->marks
-  $("form#updateTrackLength button#save").on("click", function() {
+  //$("form#updateTrackLength button#save").on("click", function() {
+  $("form#updateTrackLength").on("submit", function() {
         var racinggroup_id=$(this).attr("data-racinggroup-id");
+        event.preventDefault();
         swaggerClient.then(function(client) {
           var json={};
           json['tracklength']=parseInt( $("form#updateTrackLength input#inputTrackLength4").val(),10);

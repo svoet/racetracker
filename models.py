@@ -275,33 +275,41 @@ class HeatAPIHandler(GenericAPIHandler):
     def getRoundings(self,heat_id):
         heat = Heat.query.filter(Heat.id == heat_id).one_or_none()
         roundings = Rounding.query.filter(Rounding.heat_id == heat_id).order_by(Rounding.overriddentime).all()
+        ret=[]
 
         #each mark has its own scoring sequence. 0 is a default number for if no mark is configured
-        scoring_sequences={0:1}
         for mark in heat.racinggroup.marks:
-            scoring_sequences[mark.id]=1
+            scoring_sequence=1
+            max_roundings=0
+            rounding_counts={}
+            mark_roundings=[]
 
-        #set scoring sequence on each rounding
-        for rounding in roundings:
-            if rounding.mark_id == None:
-                rounding.mark_id=0
-            rounding.scoring_sequence=scoring_sequences[rounding.mark_id]
-            scoring_sequences[rounding.mark_id] += 1
+            for rounding in roundings:
+                #small hack to assign scorings without mark to the first mark
+                #TODO remove
+                if rounding.mark_id == None:
+                    rounding.mark_id = heat.racinggroup.marks[0].id
 
-        #indicate leader (for making a new line on the scoring grid)
-        rounding_counts={}
-        max_roundings=0
-        for rounding in roundings:
-            if rounding_counts[rounding.participant.id] == None:
-                rounding_counts[rounding.participant.id]=1
-            else:
-                rounding_counts[rounding.participant.id]+=1
+                #set scoring sequence on each rounding
+                if not rounding.mark_id == mark.id:
+                    continue
+                rounding.scoring_sequence=scoring_sequence
+                scoring_sequence += 1
 
-            if rounding_counts[rounding.participant.id] > max_roundings:
-                rounding.is_leader=True
-                max_roundings=rounding_counts[rounding.participant.id]
+                #indicate leader (for making a new line on the scoring grid)
+                if not rounding.participant.id in rounding_counts.keys():
+                    rounding_counts[rounding.participant.id]=1
+                else:
+                    rounding_counts[rounding.participant.id]+=1
 
-        return RoundingWithParticipantSchema(many=True).dump(roundings)
+                if rounding_counts[rounding.participant.id] > max_roundings:
+                    rounding.is_leader=True
+                    max_roundings=rounding_counts[rounding.participant.id]
+
+                mark_roundings.append(rounding)
+            ret.append({"mark":mark,"roundings":mark_roundings})
+
+        return MarkWithRoundingsSchema(many=True).dump(ret)
 
 
     def addRounding(self,heat_id,object):
@@ -481,9 +489,14 @@ class RoundingSchema(config.ma.SQLAlchemyAutoSchema):
         load_instance=True
         include_fk=True
 
+class MarkWithRoundingsSchema(RoundingSchema):
+    mark = config.ma.Nested('MarkSchema')
+    roundings = config.ma.Nested('RoundingWithParticipantSchema',many=True,only=('id','overriddentime','participant','scoring_sequence','is_leader'))
+
 class RoundingWithParticipantSchema(RoundingSchema):
     participant = config.ma.Nested('ParticipantSchema',only=('yacht','person'))
     scoring_sequence = config.ma.Integer()
+    is_leader = config.ma.Boolean()
 
 class RoundingAPIHandler(GenericAPIHandler):
     object_class = Rounding

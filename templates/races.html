@@ -73,14 +73,15 @@
             <div id="collapse-{{ racinggroup.id }}-marks" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
               <div class="card-body">
                   <div class="row">
-                      <form id="updateTrackLength">
+                      <form id="updateTrackLength" data-racinggroup-id="{{ racinggroup.id }}">
                           <label for="inputTrackLength4">Track Length</label>
-                          <input type="number" class="form-control" id="inputTrackLength4" name="tracklength" placeholder="e.g.: 5000" value="{{ racinggroup.tracklength }}">
-                          <button id="save" data-racinggroup-id="{{ racinggroup.id }}">Save</button>
+                          <input type="number" class="form-control" id="inputTrackLength4" name="tracklength" placeholder="meters, e.g.: 5000"value="{{ racinggroup.tracklength }}">
+                          <button id="save">Save</button>
+                      </form>
                   </div>
                   <div class="row">
-                    {% for mark in racinggroup.marks %}
-                    <button type="button" id="markButton" class="btn btn-info">
+                    {% for mark in all_marks %}
+                    <button type="button" id="markButton" data-toggle="buttons" data-id="{{ mark.id }}" class="btn btn-info{% if mark in racinggroup.marks %} active" area-pressed="true{% endif %}">
                         <i class="fas fa-align-left"></i>
                         <span>{{ mark.name }}</span>
                     </button>
