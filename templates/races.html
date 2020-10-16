@@ -42,6 +42,7 @@
           </div>
         <div id="configure-participants" racinggroup-id={{ racinggroup.id }} class="card">
             {{ m_widgets.add_participant(racinggroup,all_persons,all_yachts) }}
+            {{ m_widgets.del_participant() }}
             <div class="card-header" id="headingOne">
               <h5 class="mb-0">
                 <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ racinggroup.id }}-participants" aria-expanded="true" aria-controls="collapse-{{ racinggroup.id }}-participants">
@@ -52,7 +53,7 @@
             <div id="collapse-{{ racinggroup.id }}-participants" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
               <div class="card-body">
                 {% for participant in racinggroup.participants %}
-                <button type="button" id="participantButton" class="btn btn-info">
+                <button type="button" id="participantButton" class="btn btn-info" data-participant-id={{ participant.id }}>
                     <i class="fas fa-align-left"></i>
                     <span>{{ participant.yacht.sailnumber }} : {{ participant.person.firstname }} {{ participant.person.lastname }}</span>
                 </button>

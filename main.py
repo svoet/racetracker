@@ -4,7 +4,8 @@ import os
 sys.path.append("models")
 from flask import (
     Flask,
-    render_template
+    render_template,
+    request
 )
 from flask_login import login_required,current_user
 import config
@@ -53,7 +54,8 @@ def live(id):
 @login_required
 def scoring(id,heat_id):
     heat=api.heats.get(heat_id)
-    return render_template('scoring.html',race=api.races.get(id),heat=heat,racinggroup=api.racinggroups.get(heat['racinggroup_id']),current_user=current_user)
+    mymark_id=request.cookies.get('mymark-id')
+    return render_template('scoring.html',race=api.races.get(id),heat=heat,racinggroup=api.racinggroups.get(heat['racinggroup_id']),current_user=current_user,mymark_id=mymark_id)
 
 @app.route('/classes/')
 def classes():

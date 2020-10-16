@@ -70,7 +70,7 @@ $(document).ready(function(){
   $("#listYachts button.yacht").on("click", function() {
     $("form#addParticipant input#yachtId").val($(this).attr("data-id"));
     $("form#addParticipant input#inputSailnumber4").val($(this).text());
-    $("form#addParticipant #inputClass.option[data-id=" + $(this).attr("data-yachtclass-id") +"]").attr("selected","selected");
+    $("form#addParticipant #inputClass4 option[data-id=" + $(this).attr("data-yachtclass-id") +"]").attr("selected","selected");
   });
 
   $("form#addParticipant select#inputClass4").change(function() {
@@ -116,6 +116,22 @@ $(document).ready(function(){
   //unset personID if person part of form manually filled out
   $("form#addParticipant input.yacht").on("keyup", function() {
 	$("form#addParticipant input#yachtId").val("");
+  });
+
+  //delParticipant modal - show
+  $("button#participantButton").click(function(){
+  $('#delParticipant').attr('data-participant-id',$(this).attr('data-participant-id'));
+  $('#delParticipant span#delParticipantName').text($(this).text());
+  $('#delParticipant').modal('show')
+  });
+
+  //delParticipant modal - delete button
+  $("#delParticipant button#delete").on("click", function() {
+        var participant_id=$('#delParticipant').attr("data-participant-id");
+        swaggerClient.then(function(client) {
+          client.apis.Participants.delete_participants__object_id_({'object_id':parseInt(participant_id,10)}).then(
+              function(){$('#delParticipant').modal('hide');location.reload(); return false;});
+        });
   });
 });
 

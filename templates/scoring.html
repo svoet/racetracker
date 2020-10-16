@@ -13,14 +13,25 @@
             <div class="container-fluid">
                 <button type="button" id="sidebarCollapse" class="btn btn-info">
                     <i class="fas fa-align-left"></i>
-                    <span>Toggle Sidebar</span>
                 </button>
-                <span class="navbar-text">Heat:{{ heat.name }}</span>
-                <div class="d-md-none d-lg-block"><span class="navbar-text">Start time:{{ heat.starttime }}</span></div>
-                <div class="navbar-collapse collapse">{{ control_heat_buttons(heat) }}</div>
+                <span class="navbar-text">Heat: {{ heat.name }}</span>
+                <div class="d-md-none d-lg-block"><span class="navbar-text">Start time: {{ heat.starttime }}</span></div>
+                <div class="btn-group" role="group">
+                    <div class="btn-group" id="selectMark" role="group">
+                        <button id="btnSelectMarkDrop" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ racinggroup.marks|selectattr('id','equalto',mymark_id|int)|list|map(attribute="name")|join('')|default("Select Mark") }} 
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnSelectMarkDrop">
+                        {% for mark in racinggroup.marks %}
+                          <a class="dropdown-item" data-id="{{ mark.id }}" href="#">{{ mark.name }}</a>
+                        {% endfor %}
+                        </div>
+
+                    <div class="navbar-collapse collapse">{{ control_heat_buttons(heat) }}</div>
+                </div>
             </div>
         </nav>
-        <div id="scoring" heat-id="{{ heat.id }}">
+        <div id="scoring" heat-id="{{ heat.id }}" mark-id="{{ mymark_id }}">
             <div class="row">
                 <div id="roundingGrid" class="overflow-auto table-responsive">
             </div>
